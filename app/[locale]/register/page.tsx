@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { RegisterForm } from "@/components/register-form";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function RegisterPage() {
@@ -33,122 +33,7 @@ export default function RegisterPage() {
 
         {/* Register Card */}
         <div className="bg-card border border-border rounded-xl shadow-lg p-8">
-          <form className="space-y-5">
-            {/* Name Fields Row */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* First Name Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="firstName"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  First name
-                </label>
-                <Input
-                  id="firstName"
-                  type="text"
-                  placeholder="John"
-                  className="w-full"
-                  autoComplete="given-name"
-                />
-              </div>
-
-              {/* Last Name Field */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="lastName"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Last name
-                </label>
-                <Input
-                  id="lastName"
-                  type="text"
-                  placeholder="Doe"
-                  className="w-full"
-                  autoComplete="family-name"
-                />
-              </div>
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                className="w-full"
-                autoComplete="email"
-              />
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Password
-              </label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full"
-                autoComplete="new-password"
-              />
-            </div>
-
-            {/* Confirm Password Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="confirmPassword"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Confirm password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                className="w-full"
-                autoComplete="new-password"
-              />
-            </div>
-
-            {/* Terms and Conditions */}
-            <div className="flex items-start space-x-2 pt-1">
-              <input
-                type="checkbox"
-                id="terms"
-                className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
-              />
-              <label
-                htmlFor="terms"
-                className="text-sm text-muted-foreground leading-relaxed"
-              >
-                I agree to the{" "}
-                <Link href="/terms" className="text-primary hover:underline">
-                  Terms of Service
-                </Link>{" "}
-                and{" "}
-                <Link href="/privacy" className="text-primary hover:underline">
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
-
-            {/* Sign Up Button */}
-            <Button type="submit" className="w-full" size="lg">
-              Create account
-            </Button>
-          </form>
+          <RegisterForm />
 
           {/* Divider */}
           <div className="relative my-6">
