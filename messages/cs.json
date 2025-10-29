@@ -1,0 +1,61 @@
+{
+  "common": {
+    "backboard": "Backboard",
+    "profile": "Profil"
+  },
+  "nav": {
+    "dashboard": "Přehled",
+    "projects": "Projekty",
+    "datasets": "Datové sady",
+    "analytics": "Analytika",
+    "documents": "Dokumenty",
+    "team": "Tým",
+    "settings": "Nastavení",
+    "account": "Účet"
+  },
+  "dashboard": {
+    "title": "Přehled",
+    "welcome": "Vítejte ve vašem řídícím centru Backboard",
+    "stats": {
+      "totalProjects": "Celkem projektů",
+      "datasets": "Datové sady",
+      "activeUsers": "Aktivní uživatelé",
+      "apiCalls": "API volání"
+    },
+    "recentActivity": {
+      "title": "Nedávná aktivita",
+      "newDatasetUploaded": "Nová datová sada nahrána",
+      "pipelineCompleted": "Pipeline dokončena",
+      "userInvited": "Uživatel pozván",
+      "projectCreated": "Projekt vytvořen",
+      "timeAgo": {
+        "minutes": "{count, plural, =1 {před # minutou} few {před # minutami} other {před # minutami}}",
+        "hours": "{count, plural, =1 {před # hodinou} few {před # hodinami} other {před # hodinami}}"
+      }
+    },
+    "quickActions": {
+      "title": "Rychlé akce",
+      "createProject": {
+        "title": "Vytvořit nový projekt",
+        "description": "Začněte nový projekt od začátku"
+      },
+      "uploadDataset": {
+        "title": "Nahrát datovou sadu",
+        "description": "Importujte data pro analýzu"
+      },
+      "inviteTeamMember": {
+        "title": "Pozvat člena týmu",
+        "description": "Přidejte někoho do vaší organizace"
+      },
+      "viewDocumentation": {
+        "title": "Zobrazit dokumentaci",
+        "description": "Naučte se používat platformu"
+      }
+    }
+  },
+  "user": {
+    "name": "Jan Novák",
+    "email": "jan@example.com"
+  }
+}
+

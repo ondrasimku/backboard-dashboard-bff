@@ -1,0 +1,61 @@
+{
+  "common": {
+    "backboard": "Backboard",
+    "profile": "Profile"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "datasets": "Datasets",
+    "analytics": "Analytics",
+    "documents": "Documents",
+    "team": "Team",
+    "settings": "Settings",
+    "account": "Account"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome to your Backboard control center",
+    "stats": {
+      "totalProjects": "Total Projects",
+      "datasets": "Datasets",
+      "activeUsers": "Active Users",
+      "apiCalls": "API Calls"
+    },
+    "recentActivity": {
+      "title": "Recent Activity",
+      "newDatasetUploaded": "New dataset uploaded",
+      "pipelineCompleted": "Pipeline completed",
+      "userInvited": "User invited",
+      "projectCreated": "Project created",
+      "timeAgo": {
+        "minutes": "{count, plural, =1 {# minute ago} other {# minutes ago}}",
+        "hours": "{count, plural, =1 {# hour ago} other {# hours ago}}"
+      }
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "createProject": {
+        "title": "Create New Project",
+        "description": "Start a new project from scratch"
+      },
+      "uploadDataset": {
+        "title": "Upload Dataset",
+        "description": "Import data for analysis"
+      },
+      "inviteTeamMember": {
+        "title": "Invite Team Member",
+        "description": "Add someone to your organization"
+      },
+      "viewDocumentation": {
+        "title": "View Documentation",
+        "description": "Learn how to use the platform"
+      }
+    }
+  },
+  "user": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+

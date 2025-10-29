@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sidebar,
@@ -19,6 +20,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import {
   LayoutDashboard,
   Database,
@@ -36,49 +38,52 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-const menuItems = [
-  {
-    title: "Dashboard",
-    href: "/",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Projects",
-    href: "/projects",
-    icon: FolderKanban,
-  },
-  {
-    title: "Datasets",
-    href: "/datasets",
-    icon: Database,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-  },
-  {
-    title: "Documents",
-    href: "/documents",
-    icon: FileText,
-  },
-  {
-    title: "Team",
-    href: "/team",
-    icon: Users,
-  },
-];
-
-const settingsItems = [
-  {
-    title: "Account",
-    href: "/settings/account",
-    icon: UserCog,
-  },
-];
-
 export const AppSidebar = () => {
   const pathname = usePathname();
+  const t = useTranslations('nav');
+  const tCommon = useTranslations('common');
+  const tUser = useTranslations('user');
+
+  const menuItems = [
+    {
+      title: t('dashboard'),
+      href: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t('projects'),
+      href: "/projects",
+      icon: FolderKanban,
+    },
+    {
+      title: t('datasets'),
+      href: "/datasets",
+      icon: Database,
+    },
+    {
+      title: t('analytics'),
+      href: "/analytics",
+      icon: BarChart3,
+    },
+    {
+      title: t('documents'),
+      href: "/documents",
+      icon: FileText,
+    },
+    {
+      title: t('team'),
+      href: "/team",
+      icon: Users,
+    },
+  ];
+
+  const settingsItems = [
+    {
+      title: t('account'),
+      href: "/settings/account",
+      icon: UserCog,
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon">
@@ -91,10 +96,11 @@ export const AppSidebar = () => {
                   <span className="text-sm font-bold">B</span>
                 </div>
                 <span className="text-lg font-bold group-data-[collapsible=icon]:hidden">
-                  Backboard
+                  {tCommon('backboard')}
                 </span>
               </div>
               <div className="flex items-center gap-1">
+                <LanguageSwitcher />
                 <ThemeToggle />
                 <SidebarTrigger className="-mr-1" />
               </div>
@@ -134,9 +140,9 @@ export const AppSidebar = () => {
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip="Settings">
+                    <SidebarMenuButton tooltip={t('settings')}>
                       <Settings className="h-4 w-4" />
-                      <span>Settings</span>
+                      <span>{t('settings')}</span>
                       <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -172,15 +178,15 @@ export const AppSidebar = () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Profile">
+            <SidebarMenuButton asChild tooltip={tCommon('profile')}>
               <div className="flex items-center gap-2 cursor-pointer">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src="https://github.com/shadcn.png" alt="User" />
                   <AvatarFallback>JD</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                  <p className="text-sm font-medium leading-none">John Doe</p>
-                  <p className="text-xs text-muted-foreground">john@example.com</p>
+                  <p className="text-sm font-medium leading-none">{tUser('name')}</p>
+                  <p className="text-xs text-muted-foreground">{tUser('email')}</p>
                 </div>
               </div>
             </SidebarMenuButton>

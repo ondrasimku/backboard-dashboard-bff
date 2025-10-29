@@ -1,14 +1,20 @@
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { useTranslations } from 'next-intl';
 
 export default function Home() {
+  const t = useTranslations('dashboard');
+  const tStats = useTranslations('dashboard.stats');
+  const tActivity = useTranslations('dashboard.recentActivity');
+  const tActions = useTranslations('dashboard.quickActions');
+
   return (
     <DashboardLayout>
       <div className="p-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
           <p className="text-muted-foreground">
-            Welcome to your Backboard control center
+            {t('welcome')}
           </p>
         </div>
 
@@ -18,7 +24,7 @@ export default function Home() {
             <div className="flex items-center justify-between space-x-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Total Projects
+                  {tStats('totalProjects')}
                 </p>
                 <p className="text-2xl font-bold">24</p>
               </div>
@@ -43,7 +49,7 @@ export default function Home() {
             <div className="flex items-center justify-between space-x-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Datasets
+                  {tStats('datasets')}
                 </p>
                 <p className="text-2xl font-bold">48</p>
               </div>
@@ -70,7 +76,7 @@ export default function Home() {
             <div className="flex items-center justify-between space-x-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  Active Users
+                  {tStats('activeUsers')}
                 </p>
                 <p className="text-2xl font-bold">142</p>
               </div>
@@ -98,7 +104,7 @@ export default function Home() {
             <div className="flex items-center justify-between space-x-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  API Calls
+                  {tStats('apiCalls')}
                 </p>
                 <p className="text-2xl font-bold">8.4K</p>
               </div>
@@ -123,26 +129,26 @@ export default function Home() {
         {/* Recent Activity */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <div className="col-span-4 rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
+            <h3 className="text-lg font-semibold mb-4">{tActivity('title')}</h3>
             <div className="space-y-4">
               {[
                 {
-                  title: "New dataset uploaded",
+                  title: tActivity('newDatasetUploaded'),
                   description: "customer-data-2024.csv",
                   time: "2 minutes ago",
                 },
                 {
-                  title: "Pipeline completed",
+                  title: tActivity('pipelineCompleted'),
                   description: "Data processing pipeline #142",
                   time: "15 minutes ago",
                 },
                 {
-                  title: "User invited",
+                  title: tActivity('userInvited'),
                   description: "sarah.johnson@example.com",
                   time: "1 hour ago",
                 },
                 {
-                  title: "Project created",
+                  title: tActivity('projectCreated'),
                   description: "Q4 Analytics Dashboard",
                   time: "3 hours ago",
                 },
@@ -162,30 +168,30 @@ export default function Home() {
           </div>
 
           <div className="col-span-3 rounded-lg border bg-card p-6 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+            <h3 className="text-lg font-semibold mb-4">{tActions('title')}</h3>
             <div className="space-y-2">
               <button className="w-full rounded-lg border bg-background p-4 text-left transition-colors hover:bg-accent">
-                <p className="text-sm font-medium">Create New Project</p>
+                <p className="text-sm font-medium">{tActions('createProject.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Start a new project from scratch
+                  {tActions('createProject.description')}
                 </p>
               </button>
               <button className="w-full rounded-lg border bg-background p-4 text-left transition-colors hover:bg-accent">
-                <p className="text-sm font-medium">Upload Dataset</p>
+                <p className="text-sm font-medium">{tActions('uploadDataset.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Import data for analysis
+                  {tActions('uploadDataset.description')}
                 </p>
               </button>
               <button className="w-full rounded-lg border bg-background p-4 text-left transition-colors hover:bg-accent">
-                <p className="text-sm font-medium">Invite Team Member</p>
+                <p className="text-sm font-medium">{tActions('inviteTeamMember.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Add someone to your organization
+                  {tActions('inviteTeamMember.description')}
                 </p>
               </button>
               <button className="w-full rounded-lg border bg-background p-4 text-left transition-colors hover:bg-accent">
-                <p className="text-sm font-medium">View Documentation</p>
+                <p className="text-sm font-medium">{tActions('viewDocumentation.title')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Learn how to use the platform
+                  {tActions('viewDocumentation.description')}
                 </p>
               </button>
             </div>
@@ -195,3 +201,4 @@ export default function Home() {
     </DashboardLayout>
   );
 }
+
