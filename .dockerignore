@@ -1,0 +1,16 @@
+Dockerfile
+docker-compose*.yml
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git
+.gitignore
+.env*.local
+.vscode
+.cursor
+*.md
+.DS_Store
+.eslintcache
+

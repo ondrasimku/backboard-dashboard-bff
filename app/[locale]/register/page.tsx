@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 p-4">
       <div className="w-full max-w-md">
@@ -25,15 +25,52 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Create account</h1>
           <p className="text-muted-foreground mt-2">
-            Sign in to your Backboard account
+            Get started with Backboard today
           </p>
         </div>
 
-        {/* Login Card */}
+        {/* Register Card */}
         <div className="bg-card border border-border rounded-xl shadow-lg p-8">
-          <form className="space-y-6">
+          <form className="space-y-5">
+            {/* Name Fields Row */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* First Name Field */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="firstName"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  First name
+                </label>
+                <Input
+                  id="firstName"
+                  type="text"
+                  placeholder="John"
+                  className="w-full"
+                  autoComplete="given-name"
+                />
+              </div>
+
+              {/* Last Name Field */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="lastName"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Last name
+                </label>
+                <Input
+                  id="lastName"
+                  type="text"
+                  placeholder="Doe"
+                  className="w-full"
+                  autoComplete="family-name"
+                />
+              </div>
+            </div>
+
             {/* Email Field */}
             <div className="space-y-2">
               <label
@@ -53,32 +90,63 @@ export default function LoginPage() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+              <label
+                htmlFor="password"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Password
+              </label>
               <Input
                 id="password"
                 type="password"
                 placeholder="••••••••"
                 className="w-full"
-                autoComplete="current-password"
+                autoComplete="new-password"
               />
             </div>
 
-            {/* Sign In Button */}
+            {/* Confirm Password Field */}
+            <div className="space-y-2">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Confirm password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                className="w-full"
+                autoComplete="new-password"
+              />
+            </div>
+
+            {/* Terms and Conditions */}
+            <div className="flex items-start space-x-2 pt-1">
+              <input
+                type="checkbox"
+                id="terms"
+                className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm text-muted-foreground leading-relaxed"
+              >
+                I agree to the{" "}
+                <Link href="/terms" className="text-primary hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/privacy" className="text-primary hover:underline">
+                  Privacy Policy
+                </Link>
+              </label>
+            </div>
+
+            {/* Sign Up Button */}
             <Button type="submit" className="w-full" size="lg">
-              Sign in
+              Create account
             </Button>
           </form>
 
@@ -94,7 +162,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Social Login Buttons */}
+          {/* Social Sign Up Buttons */}
           <div className="grid grid-cols-2 gap-3">
             <Button variant="outline" type="button">
               <svg
@@ -122,11 +190,11 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Sign Up Link */}
+        {/* Sign In Link */}
         <p className="text-center text-sm text-muted-foreground mt-6">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-primary hover:underline font-medium">
-            Sign up
+          Already have an account?{" "}
+          <Link href="/login" className="text-primary hover:underline font-medium">
+            Sign in
           </Link>
         </p>
       </div>
