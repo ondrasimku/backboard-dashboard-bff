@@ -13,6 +13,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -24,7 +27,14 @@ import {
   BarChart3,
   Users,
   FileText,
+  ChevronRight,
+  UserCog,
 } from "lucide-react";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const menuItems = [
   {
@@ -57,10 +67,13 @@ const menuItems = [
     href: "/team",
     icon: Users,
   },
+];
+
+const settingsItems = [
   {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
+    title: "Account",
+    href: "/settings/account",
+    icon: UserCog,
   },
 ];
 
@@ -113,6 +126,44 @@ export const AppSidebar = () => {
                   </SidebarMenuItem>
                 );
               })}
+              
+              {/* Settings Collapsible */}
+              <Collapsible
+                defaultOpen={pathname.startsWith("/settings")}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip="Settings">
+                      <Settings className="h-4 w-4" />
+                      <span>Settings</span>
+                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {settingsItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = pathname === item.href;
+
+                        return (
+                          <SidebarMenuSubItem key={item.href}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive}
+                            >
+                              <Link href={item.href}>
+                                <Icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        );
+                      })}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
