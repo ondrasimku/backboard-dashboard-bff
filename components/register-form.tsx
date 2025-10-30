@@ -6,11 +6,12 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { userServiceApiClient, ApiValidationError } from '@/lib/services/user-service-api-client';
 
 const registerSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
+  firstName: z.string().trim().min(1, 'First name is required'),
+  lastName: z.string().trim().min(1, 'Last name is required'),
+  email: z.string().trim().email('Invalid email address'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string().min(1, 'Please confirm your password'),
   terms: z.boolean().refine((val) => val === true, {
@@ -24,93 +25,137 @@ const registerSchema = z.object({
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 type FieldErrors = Partial<Record<keyof RegisterFormData, string>>;
+type TouchedFields = Partial<Record<keyof RegisterFormData, boolean>>;
 
 export const RegisterForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<TouchedFields>({});
+  
+  // Controlled form state
+  const [formData, setFormData] = useState<RegisterFormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    terms: false,
+  });
+
+  const validateField = (fieldName: keyof RegisterFormData, value: string | boolean) => {
+    const dataToValidate = { ...formData, [fieldName]: value };
+    
+    try {
+      if (fieldName === 'confirmPassword') {
+        // For confirmPassword, validate the field itself and check password match
+        registerSchema.shape.confirmPassword.parse(value);
+        
+        if (dataToValidate.password && value && dataToValidate.password !== value) {
+          setErrors(prev => ({ ...prev, confirmPassword: "Passwords don't match" }));
+          return false;
+        } else {
+          setErrors(prev => {
+            const newErrors = { ...prev };
+            delete newErrors.confirmPassword;
+            return newErrors;
+          });
+          return true;
+        }
+      } else if (fieldName === 'terms') {
+        registerSchema.shape.terms.parse(value);
+      } else {
+        registerSchema.shape[fieldName].parse(value);
+      }
+      
+      // Clear error if validation passes
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[fieldName];
+        return newErrors;
+      });
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        setErrors(prev => ({
+          ...prev,
+          [fieldName]: error.issues[0]?.message || 'Invalid value',
+        }));
+      }
+      return false;
+    }
+  };
+
+  const handleBlur = (fieldName: keyof RegisterFormData) => {
+    setTouched(prev => ({ ...prev, [fieldName]: true }));
+    validateField(fieldName, formData[fieldName]);
+  };
+
+  const handleChange = (fieldName: keyof RegisterFormData, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [fieldName]: value }));
+    
+    // Validate on change if field has been touched
+    if (touched[fieldName]) {
+      validateField(fieldName, value);
+    }
+    
+    // Special handling: when password changes, revalidate confirmPassword if touched
+    if (fieldName === 'password' && touched.confirmPassword) {
+      validateField('confirmPassword', formData.confirmPassword);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrors({});
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      firstName: formData.get('firstName') as string,
-      lastName: formData.get('lastName') as string,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      confirmPassword: formData.get('confirmPassword') as string,
-      terms: formData.get('terms') === 'on',
-    };
-
-    // Client-side validation
-    const validationResult = registerSchema.safeParse(data);
-
-    if (!validationResult.success) {
-      const fieldErrors: FieldErrors = {};
-      validationResult.error.issues.forEach((issue) => {
-        const path = issue.path[0] as keyof RegisterFormData;
-        if (!fieldErrors[path]) {
-          fieldErrors[path] = issue.message;
-        }
-      });
-      setErrors(fieldErrors);
-      setIsLoading(false);
-      toast.error('Please fix the errors in the form');
-      return;
-    }
-
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          firstName: data.firstName,
-          lastName: data.lastName,
-        }),
-      });
+      // Client-side validation
+      const validationResult = registerSchema.safeParse(formData);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        // Handle server errors
-        if (result.details) {
-          // Server-side validation errors
-          const fieldErrors: FieldErrors = {};
-          Object.entries(result.details).forEach(([key, messages]) => {
-            if (Array.isArray(messages) && messages.length > 0) {
-              fieldErrors[key as keyof RegisterFormData] = messages[0];
-            }
-          });
-          setErrors(fieldErrors);
-          toast.error('Please fix the errors in the form');
-        } else {
-          toast.error(result.error || 'Registration failed');
-        }
-        setIsLoading(false);
+      if (!validationResult.success) {
+        const fieldErrors: FieldErrors = {};
+        validationResult.error.issues.forEach((issue) => {
+          const path = issue.path[0] as keyof RegisterFormData;
+          if (!fieldErrors[path]) {
+            fieldErrors[path] = issue.message;
+          }
+        });
+        setErrors(fieldErrors);
+        toast.error('Please fix the errors in the form');
         return;
       }
 
-      // Success - store token and redirect
-      if (result.token) {
-        localStorage.setItem('authToken', result.token);
-      }
+      // Call user service API
+      const result = await userServiceApiClient.register({
+        email: validationResult.data.email,
+        password: validationResult.data.password,
+        firstName: validationResult.data.firstName,
+        lastName: validationResult.data.lastName,
+      });
 
+      // Success - store token and redirect
+      localStorage.setItem('authToken', result.token);
       toast.success('Account created successfully!');
       
-      // Redirect to dashboard or login
       setTimeout(() => {
         router.push('/');
       }, 1000);
     } catch (error) {
-      console.error('Registration error:', error);
-      toast.error('An unexpected error occurred. Please try again.');
+      if (error instanceof ApiValidationError) {
+        // Handle validation errors from the API
+        if (error.validationErrors) {
+          setErrors(error.validationErrors as FieldErrors);
+          toast.error('Please fix the errors in the form');
+        } else {
+          toast.error(error.message);
+        }
+      } else {
+        console.error('Registration error:', error);
+        toast.error('An unexpected error occurred. Please try again.');
+      }
+    } finally {
       setIsLoading(false);
     }
   };
@@ -135,6 +180,9 @@ export const RegisterForm = () => {
             className="w-full"
             autoComplete="given-name"
             disabled={isLoading}
+            value={formData.firstName}
+            onChange={(e) => handleChange('firstName', e.target.value)}
+            onBlur={() => handleBlur('firstName')}
             aria-invalid={!!errors.firstName}
             aria-describedby={errors.firstName ? 'firstName-error' : undefined}
           />
@@ -161,6 +209,9 @@ export const RegisterForm = () => {
             className="w-full"
             autoComplete="family-name"
             disabled={isLoading}
+            value={formData.lastName}
+            onChange={(e) => handleChange('lastName', e.target.value)}
+            onBlur={() => handleBlur('lastName')}
             aria-invalid={!!errors.lastName}
             aria-describedby={errors.lastName ? 'lastName-error' : undefined}
           />
@@ -188,6 +239,9 @@ export const RegisterForm = () => {
           className="w-full"
           autoComplete="email"
           disabled={isLoading}
+          value={formData.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+          onBlur={() => handleBlur('email')}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
         />
@@ -214,6 +268,9 @@ export const RegisterForm = () => {
           className="w-full"
           autoComplete="new-password"
           disabled={isLoading}
+          value={formData.password}
+          onChange={(e) => handleChange('password', e.target.value)}
+          onBlur={() => handleBlur('password')}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? 'password-error' : undefined}
         />
@@ -240,6 +297,9 @@ export const RegisterForm = () => {
           className="w-full"
           autoComplete="new-password"
           disabled={isLoading}
+          value={formData.confirmPassword}
+          onChange={(e) => handleChange('confirmPassword', e.target.value)}
+          onBlur={() => handleBlur('confirmPassword')}
           aria-invalid={!!errors.confirmPassword}
           aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
         />
@@ -259,6 +319,11 @@ export const RegisterForm = () => {
             name="terms"
             className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2"
             disabled={isLoading}
+            checked={formData.terms}
+            onChange={(e) => {
+              setTouched(prev => ({ ...prev, terms: true }));
+              handleChange('terms', e.target.checked);
+            }}
             aria-invalid={!!errors.terms}
             aria-describedby={errors.terms ? 'terms-error' : undefined}
           />
