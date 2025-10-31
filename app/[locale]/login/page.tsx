@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { LoginForm } from "@/components/login-form";
 
 export default function LoginPage() {
   return (
@@ -33,54 +33,7 @@ export default function LoginPage() {
 
         {/* Login Card */}
         <div className="bg-card border border-border rounded-xl shadow-lg p-8">
-          <form className="space-y-6">
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                className="w-full"
-                autoComplete="email"
-              />
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="w-full"
-                autoComplete="current-password"
-              />
-            </div>
-
-            {/* Sign In Button */}
-            <Button type="submit" className="w-full" size="lg">
-              Sign in
-            </Button>
-          </form>
+          <LoginForm />
 
           {/* Divider */}
           <div className="relative my-6">

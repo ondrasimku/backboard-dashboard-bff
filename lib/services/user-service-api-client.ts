@@ -1,8 +1,5 @@
-import type { RegisterRequest, RegisterResponse, ApiError, ValidationErrors } from '@/lib/types/auth';
+import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors } from '@/lib/types/auth';
 
-/**
- * Custom error class for API errors with validation details
- */
 export class ApiValidationError extends Error {
   constructor(
     message: string,
@@ -15,11 +12,6 @@ export class ApiValidationError extends Error {
   }
 }
 
-/**
- * User Service API Client
- * Handles communication with the external user service API
- * Server-side only - uses environment variables
- */
 class UserServiceApiClient {
   private baseUrl: string;
 
@@ -28,9 +20,6 @@ class UserServiceApiClient {
     this.baseUrl = `${userServiceUrl}/api/auth`;
   }
 
-  /**
-   * Register a new user
-   */
   async register(data: RegisterRequest): Promise<RegisterResponse> {
     const response = await fetch(`${this.baseUrl}/register`, {
       method: 'POST',
@@ -40,7 +29,6 @@ class UserServiceApiClient {
       body: JSON.stringify(data),
     });
 
-    // Parse response
     let result: RegisterResponse | ApiError;
     try {
       result = await response.json();
@@ -52,11 +40,9 @@ class UserServiceApiClient {
       );
     }
 
-    // Handle error responses
     if (!response.ok) {
       const errorResult = result as ApiError;
       
-      // Extract validation errors if present
       const validationErrors: ValidationErrors = {};
       if (errorResult.details) {
         Object.entries(errorResult.details).forEach(([key, messages]) => {
@@ -76,11 +62,52 @@ class UserServiceApiClient {
 
     return result as RegisterResponse;
   }
+
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const response = await fetch(`${this.baseUrl}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    let result: LoginResponse | ApiError;
+    try {
+      result = await response.json();
+    } catch {
+      throw new ApiValidationError(
+        'Invalid server response',
+        response.status,
+        'INVALID_RESPONSE'
+      );
+    }
+
+    if (!response.ok) {
+      const errorResult = result as ApiError;
+      
+      const validationErrors: ValidationErrors = {};
+      if (errorResult.details) {
+        Object.entries(errorResult.details).forEach(([key, messages]) => {
+          if (Array.isArray(messages) && messages.length > 0) {
+            validationErrors[key] = messages[0];
+          }
+        });
+      }
+
+      throw new ApiValidationError(
+        errorResult.error || 'Login failed',
+        response.status,
+        errorResult.code,
+        Object.keys(validationErrors).length > 0 ? validationErrors : undefined
+      );
+    }
+
+    return result as LoginResponse;
+  }
 }
 
-// Export singleton instance
 export const userServiceApiClient = new UserServiceApiClient();
 
-// Export class for testing or custom instances
 export { UserServiceApiClient };
 

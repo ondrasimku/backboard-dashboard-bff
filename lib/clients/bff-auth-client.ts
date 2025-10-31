@@ -1,8 +1,6 @@
-import type { RegisterRequest, RegisterResponse, ApiError, ValidationErrors } from '@/lib/types/auth';
+import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors } from '@/lib/types/auth';
 
-/**
- * Custom error class for BFF API errors with validation details
- */
+
 export class BffApiError extends Error {
   constructor(
     message: string,
@@ -15,11 +13,6 @@ export class BffApiError extends Error {
   }
 }
 
-/**
- * BFF Auth Client
- * Handles communication with the BFF (Next.js) auth endpoints
- * Client-side only
- */
 class BffAuthClient {
   private baseUrl: string;
 
@@ -27,9 +20,6 @@ class BffAuthClient {
     this.baseUrl = baseUrl;
   }
 
-  /**
-   * Register a new user via BFF
-   */
   async register(data: RegisterRequest): Promise<RegisterResponse> {
     const response = await fetch(`${this.baseUrl}/register`, {
       method: 'POST',
@@ -39,7 +29,6 @@ class BffAuthClient {
       body: JSON.stringify(data),
     });
 
-    // Parse response
     let result: RegisterResponse | ApiError;
     try {
       result = await response.json();
@@ -51,11 +40,9 @@ class BffAuthClient {
       );
     }
 
-    // Handle error responses
     if (!response.ok) {
       const errorResult = result as ApiError;
       
-      // Extract validation errors if present
       const validationErrors: ValidationErrors = {};
       if (errorResult.details) {
         Object.entries(errorResult.details).forEach(([key, messages]) => {
@@ -75,11 +62,53 @@ class BffAuthClient {
 
     return result as RegisterResponse;
   }
+
+  async login(data: LoginRequest): Promise<Omit<LoginResponse, 'token'>> {
+    const response = await fetch(`${this.baseUrl}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+
+    let result: Omit<LoginResponse, 'token'> | ApiError;
+    try {
+      result = await response.json();
+    } catch {
+      throw new BffApiError(
+        'Invalid server response',
+        response.status,
+        'INVALID_RESPONSE'
+      );
+    }
+
+    if (!response.ok) {
+      const errorResult = result as ApiError;
+      
+      const validationErrors: ValidationErrors = {};
+      if (errorResult.details) {
+        Object.entries(errorResult.details).forEach(([key, messages]) => {
+          if (Array.isArray(messages) && messages.length > 0) {
+            validationErrors[key] = messages[0];
+          }
+        });
+      }
+
+      throw new BffApiError(
+        errorResult.error || 'Login failed',
+        response.status,
+        errorResult.code,
+        Object.keys(validationErrors).length > 0 ? validationErrors : undefined
+      );
+    }
+
+    return result as Omit<LoginResponse, 'token'>;
+  }
 }
 
-// Export singleton instance
 export const bffAuthClient = new BffAuthClient();
 
-// Export class for testing or custom instances
 export { BffAuthClient };
 

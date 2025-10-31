@@ -15,6 +15,25 @@ export interface RegisterResponse {
   token: string;
 }
 
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    emailVerified: boolean;
+    role: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  token: string;
+}
+
 export interface ApiError {
   error: string;
   code?: string;
