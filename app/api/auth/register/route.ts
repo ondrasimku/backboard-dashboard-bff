@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { userServiceApiClient, ApiValidationError } from '@/lib/services/user-service-api-client';
 
 const registerSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -27,45 +28,31 @@ export const POST = async (request: NextRequest) => {
       );
     }
 
-    const { email, password, firstName, lastName } = validationResult.data;
-
-    // Call user service
-    const userServiceUrl = process.env.USER_SERVICE_URL || 'http://user-service-express:3000';
-    const response = await fetch(`${userServiceUrl}/api/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-        firstName,
-        lastName,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return NextResponse.json(
-        {
-          error: data.message || data.error || 'Registration failed',
-          code: data.code,
-        },
-        { status: response.status }
-      );
-    }
+    // Call user service via API client
+    const result = await userServiceApiClient.register(validationResult.data);
 
     // Success - return user data and token
     return NextResponse.json(
       {
-        user: data.user,
-        token: data.token,
+        user: result.user,
+        token: result.token,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error('Registration error:', error);
+    
+    // Handle API validation errors from user service
+    if (error instanceof ApiValidationError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: error.code,
+          details: error.validationErrors,
+        },
+        { status: error.statusCode }
+      );
+    }
     
     return NextResponse.json(
       {

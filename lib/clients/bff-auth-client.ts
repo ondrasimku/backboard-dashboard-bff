@@ -1,9 +1,9 @@
 import type { RegisterRequest, RegisterResponse, ApiError, ValidationErrors } from '@/lib/types/auth';
 
 /**
- * Custom error class for API errors with validation details
+ * Custom error class for BFF API errors with validation details
  */
-export class ApiValidationError extends Error {
+export class BffApiError extends Error {
   constructor(
     message: string,
     public statusCode: number,
@@ -11,25 +11,24 @@ export class ApiValidationError extends Error {
     public validationErrors?: ValidationErrors
   ) {
     super(message);
-    this.name = 'ApiValidationError';
+    this.name = 'BffApiError';
   }
 }
 
 /**
- * User Service API Client
- * Handles communication with the external user service API
- * Server-side only - uses environment variables
+ * BFF Auth Client
+ * Handles communication with the BFF (Next.js) auth endpoints
+ * Client-side only
  */
-class UserServiceApiClient {
+class BffAuthClient {
   private baseUrl: string;
 
-  constructor() {
-    const userServiceUrl = process.env.USER_SERVICE_URL || 'http://user-service-express:3000';
-    this.baseUrl = `${userServiceUrl}/api/auth`;
+  constructor(baseUrl = '/api/auth') {
+    this.baseUrl = baseUrl;
   }
 
   /**
-   * Register a new user
+   * Register a new user via BFF
    */
   async register(data: RegisterRequest): Promise<RegisterResponse> {
     const response = await fetch(`${this.baseUrl}/register`, {
@@ -45,7 +44,7 @@ class UserServiceApiClient {
     try {
       result = await response.json();
     } catch {
-      throw new ApiValidationError(
+      throw new BffApiError(
         'Invalid server response',
         response.status,
         'INVALID_RESPONSE'
@@ -66,7 +65,7 @@ class UserServiceApiClient {
         });
       }
 
-      throw new ApiValidationError(
+      throw new BffApiError(
         errorResult.error || 'Registration failed',
         response.status,
         errorResult.code,
@@ -79,8 +78,8 @@ class UserServiceApiClient {
 }
 
 // Export singleton instance
-export const userServiceApiClient = new UserServiceApiClient();
+export const bffAuthClient = new BffAuthClient();
 
 // Export class for testing or custom instances
-export { UserServiceApiClient };
+export { BffAuthClient };
 

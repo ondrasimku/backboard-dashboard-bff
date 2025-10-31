@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { userServiceApiClient, ApiValidationError } from '@/lib/services/user-service-api-client';
+import { bffAuthClient, BffApiError } from '@/lib/clients/bff-auth-client';
 
 const registerSchema = z.object({
   firstName: z.string().trim().min(1, 'First name is required'),
@@ -127,8 +127,8 @@ export const RegisterForm = () => {
         return;
       }
 
-      // Call user service API
-      const result = await userServiceApiClient.register({
+      // Call BFF auth endpoint
+      const result = await bffAuthClient.register({
         email: validationResult.data.email,
         password: validationResult.data.password,
         firstName: validationResult.data.firstName,
@@ -143,8 +143,8 @@ export const RegisterForm = () => {
         router.push('/');
       }, 1000);
     } catch (error) {
-      if (error instanceof ApiValidationError) {
-        // Handle validation errors from the API
+      if (error instanceof BffApiError) {
+        // Handle validation errors from the BFF
         if (error.validationErrors) {
           setErrors(error.validationErrors as FieldErrors);
           toast.error('Please fix the errors in the form');
