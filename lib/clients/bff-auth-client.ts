@@ -106,6 +106,21 @@ class BffAuthClient {
 
     return result as Omit<LoginResponse, 'token'>;
   }
+
+  async logout(): Promise<void> {
+    const response = await fetch(`${this.baseUrl}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new BffApiError(
+        'Logout failed',
+        response.status,
+        'LOGOUT_FAILED'
+      );
+    }
+  }
 }
 
 export const bffAuthClient = new BffAuthClient();

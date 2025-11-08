@@ -1,7 +1,9 @@
 {
   "common": {
     "backboard": "Backboard",
-    "profile": "Profil"
+    "profile": "Profil",
+    "logout": "Odhlásit se",
+    "loggingOut": "Odhlašování..."
   },
   "nav": {
     "dashboard": "Přehled",

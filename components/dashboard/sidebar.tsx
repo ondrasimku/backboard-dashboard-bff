@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -31,18 +31,43 @@ import {
   FileText,
   ChevronRight,
   UserCog,
+  LogOut,
+  ChevronUp,
 } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { bffAuthClient } from "@/lib/clients/bff-auth-client";
+import { useState } from "react";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const t = useTranslations('nav');
   const tCommon = useTranslations('common');
   const tUser = useTranslations('user');
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await bffAuthClient.logout();
+      router.push('/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setIsLoggingOut(false);
+    }
+  };
 
   const menuItems = [
     {
@@ -178,18 +203,38 @@ export const AppSidebar = () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip={tCommon('profile')}>
-              <div className="flex items-center gap-2 cursor-pointer">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                  <p className="text-sm font-medium leading-none">{tUser('name')}</p>
-                  <p className="text-xs text-muted-foreground">{tUser('email')}</p>
-                </div>
-              </div>
-            </SidebarMenuButton>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton tooltip={tCommon('profile')} className="data-[state=open]:bg-accent">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="https://github.com/shadcn.png" alt="User" />
+                    <AvatarFallback>JD</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                    <p className="text-sm font-medium leading-none">{tUser('name')}</p>
+                    <p className="text-xs text-muted-foreground">{tUser('email')}</p>
+                  </div>
+                  <ChevronUp className="ml-auto h-4 w-4 group-data-[collapsible=icon]:hidden" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="top" align="end" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/settings/account" className="cursor-pointer">
+                    <UserCog className="mr-2 h-4 w-4" />
+                    <span>{t('account')}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="cursor-pointer text-destructive focus:text-destructive"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>{isLoggingOut ? tCommon('loggingOut') : tCommon('logout')}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

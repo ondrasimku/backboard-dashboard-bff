@@ -1,7 +1,9 @@
 {
   "common": {
     "backboard": "Backboard",
-    "profile": "Profile"
+    "profile": "Profile",
+    "logout": "Logout",
+    "loggingOut": "Logging out..."
   },
   "nav": {
     "dashboard": "Dashboard",
