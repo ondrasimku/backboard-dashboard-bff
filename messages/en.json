@@ -98,6 +98,43 @@
       "passwordMinLength": "Password must be at least 8 characters"
     }
   },
+  "settings": {
+    "account": {
+      "title": "Account Settings",
+      "description": "Manage your account information and security",
+      "profile": {
+        "title": "Profile Information",
+        "description": "Update your personal information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email Address",
+        "role": "Role",
+        "emailVerified": "Email Verified",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "success": "Profile updated successfully",
+        "error": "Failed to update profile"
+      },
+      "password": {
+        "title": "Change Password",
+        "description": "Update your account password",
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "changePassword": "Change Password",
+        "changing": "Changing...",
+        "success": "Password changed successfully",
+        "error": "Failed to change password",
+        "passwordMismatch": "Passwords don't match",
+        "passwordMinLength": "Password must be at least 8 characters"
+      },
+      "accountInfo": {
+        "title": "Account Information",
+        "createdAt": "Account Created",
+        "updatedAt": "Last Updated"
+      }
+    }
+  },
   "administration": {
     "users": {
       "title": "Users",

@@ -98,6 +98,43 @@
       "passwordMinLength": "Heslo musí obsahovat alespoň 8 znaků"
     }
   },
+  "settings": {
+    "account": {
+      "title": "Nastavení účtu",
+      "description": "Spravujte informace o svém účtu a zabezpečení",
+      "profile": {
+        "title": "Informace o profilu",
+        "description": "Aktualizujte své osobní údaje",
+        "firstName": "Jméno",
+        "lastName": "Příjmení",
+        "email": "Emailová adresa",
+        "role": "Role",
+        "emailVerified": "Email ověřen",
+        "save": "Uložit změny",
+        "saving": "Ukládám...",
+        "success": "Profil byl úspěšně aktualizován",
+        "error": "Nepodařilo se aktualizovat profil"
+      },
+      "password": {
+        "title": "Změna hesla",
+        "description": "Aktualizujte heslo svého účtu",
+        "currentPassword": "Současné heslo",
+        "newPassword": "Nové heslo",
+        "confirmPassword": "Potvrdit nové heslo",
+        "changePassword": "Změnit heslo",
+        "changing": "Měním...",
+        "success": "Heslo bylo úspěšně změněno",
+        "error": "Nepodařilo se změnit heslo",
+        "passwordMismatch": "Hesla se neshodují",
+        "passwordMinLength": "Heslo musí obsahovat alespoň 8 znaků"
+      },
+      "accountInfo": {
+        "title": "Informace o účtu",
+        "createdAt": "Účet vytvořen",
+        "updatedAt": "Naposledy aktualizován"
+      }
+    }
+  },
   "administration": {
     "users": {
       "title": "Uživatelé",
