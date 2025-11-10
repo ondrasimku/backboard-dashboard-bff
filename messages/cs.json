@@ -12,6 +12,8 @@
     "analytics": "Analytika",
     "documents": "Dokumenty",
     "team": "Tým",
+    "administration": "Administrace",
+    "users": "Uživatelé",
     "settings": "Nastavení",
     "account": "Účet"
   },
@@ -58,6 +60,65 @@
   "user": {
     "name": "Jan Novák",
     "email": "jan@example.com"
+  },
+  "administration": {
+    "users": {
+      "title": "Uživatelé",
+      "description": "Správa uživatelů platformy a jejich oprávnění",
+      "table": {
+        "name": "Jméno",
+        "email": "Email",
+        "role": "Role",
+        "emailVerified": "Email ověřen",
+        "createdAt": "Vytvořen",
+        "actions": "Akce"
+      },
+      "filters": {
+        "search": "Hledat uživatele...",
+        "role": "Role",
+        "allRoles": "Všechny role",
+        "verified": "Email ověřen",
+        "allStatuses": "Všechny stavy",
+        "verifiedOnly": "Ověřené",
+        "unverifiedOnly": "Neověřené"
+      },
+      "pagination": {
+        "previous": "Předchozí",
+        "next": "Další",
+        "page": "Stránka {page} z {totalPages}",
+        "showing": "Zobrazeno {from} až {to} z {total} uživatelů"
+      },
+      "roles": {
+        "admin": "Administrátor",
+        "user": "Uživatel"
+      },
+      "status": {
+        "verified": "Ověřen",
+        "unverified": "Neověřen"
+      },
+      "noResults": "Nebyli nalezeni žádní uživatelé",
+      "loading": "Načítám uživatele...",
+      "error": "Nepodařilo se načíst uživatele",
+      "detail": {
+        "title": "Detail uživatele",
+        "backToUsers": "Zpět na uživatele",
+        "personalInfo": "Osobní informace",
+        "accountInfo": "Informace o účtu",
+        "fields": {
+          "id": "ID uživatele",
+          "firstName": "Jméno",
+          "lastName": "Příjmení",
+          "email": "Emailová adresa",
+          "role": "Role",
+          "emailVerified": "Email ověřen",
+          "createdAt": "Účet vytvořen",
+          "updatedAt": "Naposledy aktualizován"
+        },
+        "loading": "Načítám detail uživatele...",
+        "error": "Nepodařilo se načíst detail uživatele",
+        "notFound": "Uživatel nenalezen"
+      }
+    }
   }
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useTranslations } from 'next-intl';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -33,6 +32,7 @@ import {
   UserCog,
   LogOut,
   ChevronUp,
+  Shield,
 } from "lucide-react";
 import {
   Collapsible,
@@ -110,6 +110,14 @@ export const AppSidebar = () => {
     },
   ];
 
+  const administrationItems = [
+    {
+      title: t('users'),
+      href: "/administration/users",
+      icon: Users,
+    },
+  ];
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -158,6 +166,44 @@ export const AppSidebar = () => {
                 );
               })}
               
+              {/* Administration Collapsible */}
+              <Collapsible
+                defaultOpen={pathname.startsWith("/administration")}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton tooltip={t('administration')}>
+                      <Shield className="h-4 w-4" />
+                      <span>{t('administration')}</span>
+                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {administrationItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = pathname === item.href;
+
+                        return (
+                          <SidebarMenuSubItem key={item.href}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={isActive}
+                            >
+                              <Link href={item.href}>
+                                <Icon className="h-4 w-4" />
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        );
+                      })}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+
               {/* Settings Collapsible */}
               <Collapsible
                 defaultOpen={pathname.startsWith("/settings")}

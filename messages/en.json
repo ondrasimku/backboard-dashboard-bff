@@ -12,6 +12,8 @@
     "analytics": "Analytics",
     "documents": "Documents",
     "team": "Team",
+    "administration": "Administration",
+    "users": "Users",
     "settings": "Settings",
     "account": "Account"
   },
@@ -58,6 +60,65 @@
   "user": {
     "name": "John Doe",
     "email": "john@example.com"
+  },
+  "administration": {
+    "users": {
+      "title": "Users",
+      "description": "Manage platform users and their permissions",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "emailVerified": "Email Verified",
+        "createdAt": "Created At",
+        "actions": "Actions"
+      },
+      "filters": {
+        "search": "Search users...",
+        "role": "Role",
+        "allRoles": "All Roles",
+        "verified": "Email Verified",
+        "allStatuses": "All Statuses",
+        "verifiedOnly": "Verified",
+        "unverifiedOnly": "Unverified"
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {page} of {totalPages}",
+        "showing": "Showing {from} to {to} of {total} users"
+      },
+      "roles": {
+        "admin": "Admin",
+        "user": "User"
+      },
+      "status": {
+        "verified": "Verified",
+        "unverified": "Unverified"
+      },
+      "noResults": "No users found",
+      "loading": "Loading users...",
+      "error": "Failed to load users",
+      "detail": {
+        "title": "User Details",
+        "backToUsers": "Back to Users",
+        "personalInfo": "Personal Information",
+        "accountInfo": "Account Information",
+        "fields": {
+          "id": "User ID",
+          "firstName": "First Name",
+          "lastName": "Last Name",
+          "email": "Email Address",
+          "role": "Role",
+          "emailVerified": "Email Verified",
+          "createdAt": "Account Created",
+          "updatedAt": "Last Updated"
+        },
+        "loading": "Loading user details...",
+        "error": "Failed to load user details",
+        "notFound": "User not found"
+      }
+    }
   }
 }
 
