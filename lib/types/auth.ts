@@ -44,3 +44,27 @@ export interface ValidationErrors {
   [key: string]: string;
 }
 
+export interface PasswordResetRequestRequest {
+  email: string;
+}
+
+export interface PasswordResetRequestResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface PasswordResetVerifyResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface PasswordResetResetRequest {
+  token: string;
+  newPassword: string;
+}
+
+export interface PasswordResetResetResponse {
+  success: boolean;
+  message: string;
+}
+

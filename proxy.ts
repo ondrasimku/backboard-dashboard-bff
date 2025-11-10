@@ -4,7 +4,7 @@ import { routing } from './i18n/routing';
 
 const handleI18nRouting = createMiddleware(routing);
 
-const PUBLIC_ROUTES = ['/login', '/register'];
+const PUBLIC_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password'];
 const AUTH_ROUTES = ['/login', '/register'];
 
 const isPublicRoute = (pathname: string): boolean => {

@@ -61,6 +61,43 @@
     "name": "Jan Novák",
     "email": "jan@example.com"
   },
+  "auth": {
+    "login": {
+      "title": "Vítejte zpět",
+      "subtitle": "Přihlaste se do svého účtu Backboard",
+      "email": "Email",
+      "password": "Heslo",
+      "forgotPassword": "Zapomenuté heslo?",
+      "signIn": "Přihlásit se",
+      "signingIn": "Přihlašování...",
+      "noAccount": "Nemáte účet?",
+      "signUp": "Zaregistrovat se"
+    },
+    "forgotPassword": {
+      "title": "Zapomenuté heslo?",
+      "subtitle": "Žádný problém, pošleme vám instrukce pro obnovení",
+      "email": "Email",
+      "sendResetLink": "Odeslat odkaz pro obnovení",
+      "sending": "Odesílání...",
+      "rememberPassword": "Vzpomněli jste si na heslo?",
+      "backToLogin": "Zpět na přihlášení",
+      "successMessage": "Pokud email existuje v našem systému, byl na vaši emailovou adresu odeslán odkaz pro obnovení hesla. Zkontrolujte prosím svou schránku a postupujte podle instrukcí."
+    },
+    "resetPassword": {
+      "title": "Obnovení hesla",
+      "subtitle": "Zadejte své nové heslo níže",
+      "newPassword": "Nové heslo",
+      "confirmPassword": "Potvrdit heslo",
+      "resetPassword": "Obnovit heslo",
+      "resettingPassword": "Obnovování hesla...",
+      "rememberPassword": "Vzpomněli jste si na heslo?",
+      "backToLogin": "Zpět na přihlášení",
+      "invalidToken": "Neplatný nebo expirovaný odkaz pro obnovení",
+      "requestNewLink": "Požádat o nový odkaz",
+      "passwordMismatch": "Hesla se neshodují",
+      "passwordMinLength": "Heslo musí obsahovat alespoň 8 znaků"
+    }
+  },
   "administration": {
     "users": {
       "title": "Uživatelé",

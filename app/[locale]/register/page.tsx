@@ -1,7 +1,7 @@
 import { RegisterForm } from "@/components/register-form";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export default function RegisterPage() {
   return (

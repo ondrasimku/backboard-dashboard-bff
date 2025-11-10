@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { bffAuthClient, BffApiError } from '@/lib/clients/bff-auth-client';
+import { useRouter } from '@/i18n/navigation';
 
 const registerSchema = z.object({
   firstName: z.string().trim().min(1, 'First name is required'),

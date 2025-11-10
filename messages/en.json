@@ -61,6 +61,43 @@
     "name": "John Doe",
     "email": "john@example.com"
   },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your Backboard account",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "signIn": "Sign in",
+      "signingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "subtitle": "No worries, we'll send you reset instructions",
+      "email": "Email",
+      "sendResetLink": "Send reset link",
+      "sending": "Sending...",
+      "rememberPassword": "Remember your password?",
+      "backToLogin": "Back to login",
+      "successMessage": "If the email exists in our system, a password reset link has been sent to your email address. Please check your inbox and follow the instructions."
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Enter your new password below",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "resetPassword": "Reset password",
+      "resettingPassword": "Resetting password...",
+      "rememberPassword": "Remember your password?",
+      "backToLogin": "Back to login",
+      "invalidToken": "Invalid or expired reset token",
+      "requestNewLink": "Request new reset link",
+      "passwordMismatch": "Passwords don't match",
+      "passwordMinLength": "Password must be at least 8 characters"
+    }
+  },
   "administration": {
     "users": {
       "title": "Users",

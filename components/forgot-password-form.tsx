@@ -6,32 +6,29 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { bffAuthClient, BffApiError } from '@/lib/clients/bff-auth-client';
-import { Link, useRouter } from '@/i18n/navigation';
 
-const loginSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().trim().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
+type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
-type FieldErrors = Partial<Record<keyof LoginFormData, string>>;
-type TouchedFields = Partial<Record<keyof LoginFormData, boolean>>;
+type FieldErrors = Partial<Record<keyof ForgotPasswordFormData, string>>;
+type TouchedFields = Partial<Record<keyof ForgotPasswordFormData, boolean>>;
 
-export const LoginForm = () => {
-  const router = useRouter();
+export const ForgotPasswordForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<TouchedFields>({});
   
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState<ForgotPasswordFormData>({
     email: '',
-    password: '',
   });
 
-  const validateField = (fieldName: keyof LoginFormData, value: string) => {
+  const validateField = (fieldName: keyof ForgotPasswordFormData, value: string) => {
     try {
-      loginSchema.shape[fieldName].parse(value);
+      forgotPasswordSchema.shape[fieldName].parse(value);
       
       setErrors(prev => {
         const newErrors = { ...prev };
@@ -50,12 +47,12 @@ export const LoginForm = () => {
     }
   };
 
-  const handleBlur = (fieldName: keyof LoginFormData) => {
+  const handleBlur = (fieldName: keyof ForgotPasswordFormData) => {
     setTouched(prev => ({ ...prev, [fieldName]: true }));
     validateField(fieldName, formData[fieldName]);
   };
 
-  const handleChange = (fieldName: keyof LoginFormData, value: string) => {
+  const handleChange = (fieldName: keyof ForgotPasswordFormData, value: string) => {
     setFormData(prev => ({ ...prev, [fieldName]: value }));
     
     if (touched[fieldName]) {
@@ -69,12 +66,12 @@ export const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const validationResult = loginSchema.safeParse(formData);
+      const validationResult = forgotPasswordSchema.safeParse(formData);
 
       if (!validationResult.success) {
         const fieldErrors: FieldErrors = {};
         validationResult.error.issues.forEach((issue) => {
-          const path = issue.path[0] as keyof LoginFormData;
+          const path = issue.path[0] as keyof ForgotPasswordFormData;
           if (!fieldErrors[path]) {
             fieldErrors[path] = issue.message;
           }
@@ -84,16 +81,12 @@ export const LoginForm = () => {
         return;
       }
 
-      const result = await bffAuthClient.login({
+      const result = await bffAuthClient.passwordResetRequest({
         email: validationResult.data.email,
-        password: validationResult.data.password,
       });
 
-      toast.success('Login successful!');
-      
-      setTimeout(() => {
-        router.push('/');
-      }, 1000);
+      setIsSuccess(true);
+      toast.success(result.message);
     } catch (error) {
       if (error instanceof BffApiError) {
         if (error.validationErrors) {
@@ -103,7 +96,7 @@ export const LoginForm = () => {
           toast.error(error.message);
         }
       } else {
-        console.error('Login error:', error);
+        console.error('Forgot password error:', error);
         toast.error('An unexpected error occurred. Please try again.');
       }
     } finally {
@@ -111,9 +104,21 @@ export const LoginForm = () => {
     }
   };
 
+  if (isSuccess) {
+    return (
+      <div className="space-y-4 text-center">
+        <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950">
+          <p className="text-sm text-green-800 dark:text-green-200">
+            If the email exists in our system, a password reset link has been sent to your email address.
+            Please check your inbox and follow the instructions.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Email Field */}
       <div className="space-y-2">
         <label
           htmlFor="email"
@@ -142,49 +147,10 @@ export const LoginForm = () => {
         )}
       </div>
 
-      {/* Password Field */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor="password"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Password
-          </label>
-          <Link
-            href="/forgot-password"
-            className="text-sm text-primary hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
-        <Input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="••••••••"
-          className="w-full"
-          autoComplete="current-password"
-          disabled={isLoading}
-          value={formData.password}
-          onChange={(e) => handleChange('password', e.target.value)}
-          onBlur={() => handleBlur('password')}
-          aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? 'password-error' : undefined}
-        />
-        {errors.password && (
-          <p id="password-error" className="text-sm text-destructive">
-            {errors.password}
-          </p>
-        )}
-      </div>
-
-      {/* Sign In Button */}
       <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-        {isLoading ? 'Signing in...' : 'Sign in'}
+        {isLoading ? 'Sending...' : 'Send reset link'}
       </Button>
     </form>
   );
 };
-
 
