@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import type { User } from "@/lib/types/user";
 import { toast } from "sonner";
 
@@ -48,45 +49,41 @@ export const ProfileForm = ({ user, onUpdate }: ProfileFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="firstName" className="text-sm font-medium">
-          {t("firstName")}
-        </label>
-        <Input
-          id="firstName"
-          value={formData.firstName}
-          onChange={(e) =>
-            setFormData({ ...formData, firstName: e.target.value })
-          }
-          disabled={isLoading}
-          required
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="firstName">{t("firstName")}</Label>
+          <Input
+            id="firstName"
+            value={formData.firstName}
+            onChange={(e) =>
+              setFormData({ ...formData, firstName: e.target.value })
+            }
+            disabled={isLoading}
+            required
+          />
+        </div>
 
-      <div className="space-y-2">
-        <label htmlFor="lastName" className="text-sm font-medium">
-          {t("lastName")}
-        </label>
-        <Input
-          id="lastName"
-          value={formData.lastName}
-          onChange={(e) =>
-            setFormData({ ...formData, lastName: e.target.value })
-          }
-          disabled={isLoading}
-          required
-        />
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="lastName">{t("lastName")}</Label>
+          <Input
+            id="lastName"
+            value={formData.lastName}
+            onChange={(e) =>
+              setFormData({ ...formData, lastName: e.target.value })
+            }
+            disabled={isLoading}
+            required
+          />
+        </div>
 
-      <div className="space-y-2">
-        <label htmlFor="email" className="text-sm font-medium">
-          {t("email")}
-        </label>
-        <Input id="email" value={user.email} disabled className="bg-muted" />
-        <p className="text-xs text-muted-foreground">
-          Email address cannot be changed
-        </p>
+        <div className="space-y-2">
+          <Label htmlFor="email">{t("email")}</Label>
+          <Input id="email" value={user.email} disabled className="bg-muted" />
+          <p className="text-xs text-muted-foreground">
+            Email address cannot be changed
+          </p>
+        </div>
       </div>
 
       <Button type="submit" disabled={isLoading}>

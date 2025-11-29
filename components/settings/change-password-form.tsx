@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { Key } from "lucide-react";
 
 export const ChangePasswordForm = () => {
   const t = useTranslations("settings.account.password");
@@ -72,67 +75,71 @@ export const ChangePasswordForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <label htmlFor="currentPassword" className="text-sm font-medium">
-          {t("currentPassword")}
-        </label>
-        <Input
-          id="currentPassword"
-          type="password"
-          value={formData.currentPassword}
-          onChange={(e) =>
-            setFormData({ ...formData, currentPassword: e.target.value })
-          }
-          disabled={isLoading}
-          required
-        />
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="space-y-1">
+          <Label className="text-base">Password</Label>
+          <p className="text-muted-foreground text-sm">Update your account password</p>
+        </div>
       </div>
+      <Separator />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="currentPassword">{t("currentPassword")}</Label>
+          <Input
+            id="currentPassword"
+            type="password"
+            value={formData.currentPassword}
+            onChange={(e) =>
+              setFormData({ ...formData, currentPassword: e.target.value })
+            }
+            disabled={isLoading}
+            required
+          />
+        </div>
 
-      <div className="space-y-2">
-        <label htmlFor="newPassword" className="text-sm font-medium">
-          {t("newPassword")}
-        </label>
-        <Input
-          id="newPassword"
-          type="password"
-          value={formData.newPassword}
-          onChange={(e) => {
-            setFormData({ ...formData, newPassword: e.target.value });
-            setErrors({ ...errors, newPassword: "" });
-          }}
-          disabled={isLoading}
-          required
-        />
-        {errors.newPassword && (
-          <p className="text-xs text-destructive">{errors.newPassword}</p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="newPassword">{t("newPassword")}</Label>
+          <Input
+            id="newPassword"
+            type="password"
+            value={formData.newPassword}
+            onChange={(e) => {
+              setFormData({ ...formData, newPassword: e.target.value });
+              setErrors({ ...errors, newPassword: "" });
+            }}
+            disabled={isLoading}
+            required
+          />
+          {errors.newPassword && (
+            <p className="text-xs text-destructive">{errors.newPassword}</p>
+          )}
+        </div>
 
-      <div className="space-y-2">
-        <label htmlFor="confirmPassword" className="text-sm font-medium">
-          {t("confirmPassword")}
-        </label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={(e) => {
-            setFormData({ ...formData, confirmPassword: e.target.value });
-            setErrors({ ...errors, confirmPassword: "" });
-          }}
-          disabled={isLoading}
-          required
-        />
-        {errors.confirmPassword && (
-          <p className="text-xs text-destructive">{errors.confirmPassword}</p>
-        )}
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={(e) => {
+              setFormData({ ...formData, confirmPassword: e.target.value });
+              setErrors({ ...errors, confirmPassword: "" });
+            }}
+            disabled={isLoading}
+            required
+          />
+          {errors.confirmPassword && (
+            <p className="text-xs text-destructive">{errors.confirmPassword}</p>
+          )}
+        </div>
 
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? t("changing") : t("changePassword")}
-      </Button>
-    </form>
+        <Button type="submit" disabled={isLoading}>
+          <Key className="mr-2 h-4 w-4" />
+          {isLoading ? t("changing") : t("changePassword")}
+        </Button>
+      </form>
+    </div>
   );
 };
 

@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
-import { ProfileForm } from "@/components/settings/profile-form";
-import { AvatarUpload } from "@/components/settings/avatar-upload";
-import { ChangePasswordForm } from "@/components/settings/change-password-form";
-import { Badge } from "@/components/ui/badge";
+import { ProfileHeader } from "@/components/settings/profile-header";
+import { ProfileContent } from "@/components/settings/profile-content";
 import type { User } from "@/lib/types/user";
 
 export default function AccountSettingsPage() {
@@ -68,89 +66,9 @@ export default function AccountSettingsPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-8 space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("description")}</p>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold">{t("avatar.title") || "Profile Picture"}</h2>
-            <p className="text-sm text-muted-foreground">
-              {t("avatar.description") || "Upload and manage your profile picture"}
-            </p>
-          </div>
-          <AvatarUpload user={user} onUpdate={handleProfileUpdate} />
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">{t("profile.title")}</h2>
-              <p className="text-sm text-muted-foreground">
-                {t("profile.description")}
-              </p>
-            </div>
-            <ProfileForm user={user} onUpdate={handleProfileUpdate} />
-          </div>
-
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold">{t("password.title")}</h2>
-              <p className="text-sm text-muted-foreground">
-                {t("password.description")}
-              </p>
-            </div>
-            <ChangePasswordForm />
-          </div>
-        </div>
-
-        <div className="rounded-lg border bg-card p-6 shadow-sm">
-          <h2 className="mb-4 text-xl font-semibold">{t("accountInfo.title")}</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                {t("profile.roles")}
-              </p>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {user.roles && user.roles.length > 0 ? (
-                  user.roles.map((role) => (
-                    <Badge key={role.id} variant="default">
-                      {role.name}
-                    </Badge>
-                  ))
-                ) : (
-                  <Badge variant="secondary">No roles</Badge>
-                )}
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                {t("profile.emailVerified")}
-              </p>
-              <Badge variant={user.emailVerified ? "default" : "destructive"}>
-                {user.emailVerified ? "Verified" : "Not Verified"}
-              </Badge>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                {t("accountInfo.createdAt")}
-              </p>
-              <p className="text-sm">
-                {new Date(user.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                {t("accountInfo.updatedAt")}
-              </p>
-              <p className="text-sm">
-                {new Date(user.updatedAt).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        </div>
+      <div className="container mx-auto space-y-6 px-4 py-10">
+        <ProfileHeader user={user} onUpdate={handleProfileUpdate} />
+        <ProfileContent user={user} onUpdate={handleProfileUpdate} />
       </div>
     </DashboardLayout>
   );
