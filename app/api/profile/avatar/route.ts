@@ -49,6 +49,9 @@ export async function POST(request: NextRequest) {
 
     const mediaResponse = await fetch(`${MEDIA_SERVICE_URL}/files`, {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
       body: mediaFormData,
     });
 
