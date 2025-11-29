@@ -47,7 +47,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { bffAuthClient } from "@/lib/clients/bff-auth-client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import type { User } from "@/lib/types/user";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -86,11 +87,6 @@ export const AppSidebar = () => {
       icon: Database,
     },
     {
-      title: t('analytics'),
-      href: "/analytics",
-      icon: BarChart3,
-    },
-    {
       title: t('documents'),
       href: "/documents",
       icon: FileText,
@@ -110,7 +106,56 @@ export const AppSidebar = () => {
     },
   ];
 
+  const [userCount, setUserCount] = useState<number | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [userLoading, setUserLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        const response = await fetch('/api/users/metrics');
+        if (response.ok) {
+          const data = await response.json();
+          setUserCount(data.userCount);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user count:', error);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        setUserLoading(true);
+        const response = await fetch('/api/users/me');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
   const administrationItems = [
+    {
+      title: t('analytics'),
+      href: "/administration/analytics",
+      icon: BarChart3,
+      badge: userCount !== null ? userCount.toString() : undefined,
+    },
     {
       title: t('users'),
       href: "/administration/users",
@@ -194,6 +239,11 @@ export const AppSidebar = () => {
                               <Link href={item.href}>
                                 <Icon className="h-4 w-4" />
                                 <span>{item.title}</span>
+                                {item.badge && (
+                                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                                    {item.badge}
+                                  </span>
+                                )}
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
@@ -253,12 +303,18 @@ export const AppSidebar = () => {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton tooltip={tCommon('profile')} className="data-[state=open]:bg-accent">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarImage src={user?.avatarUrl || undefined} alt={user ? `${user.firstName} ${user.lastName}` : "User"} />
+                    <AvatarFallback>
+                      {user ? getInitials(user.firstName, user.lastName) : "U"}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                    <p className="text-sm font-medium leading-none">{tUser('name')}</p>
-                    <p className="text-xs text-muted-foreground">{tUser('email')}</p>
+                    <p className="text-sm font-medium leading-none">
+                      {user ? `${user.firstName} ${user.lastName}` : (userLoading ? "Loading..." : tUser('name'))}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {user ? user.email : (userLoading ? "" : tUser('email'))}
+                    </p>
                   </div>
                   <ChevronUp className="ml-auto h-4 w-4 group-data-[collapsible=icon]:hidden" />
                 </SidebarMenuButton>

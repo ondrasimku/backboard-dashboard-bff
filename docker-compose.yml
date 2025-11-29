@@ -11,6 +11,8 @@ services:
     environment:
       - NODE_ENV=development
       # - NEXT_PUBLIC_API_URL=
+      # - MEDIA_SERVICE_URL=http://localhost:8080
+      # - USER_SERVICE_URL=http://user-service-express:3000
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

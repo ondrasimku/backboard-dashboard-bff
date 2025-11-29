@@ -132,10 +132,31 @@
         "title": "Informace o účtu",
         "createdAt": "Účet vytvořen",
         "updatedAt": "Naposledy aktualizován"
+      },
+      "avatar": {
+        "title": "Profilový obrázek",
+        "description": "Nahrajte obrázek ve formátu JPEG, PNG nebo WebP (max 10MB)",
+        "select": "Vybrat obrázek",
+        "upload": "Nahrát",
+        "uploading": "Nahrávám...",
+        "selected": "Vybráno",
+        "success": "Profilový obrázek byl úspěšně nahrán",
+        "error": {
+          "invalidType": "Neplatný typ souboru. Nahrajte prosím obrázek ve formátu JPEG, PNG nebo WebP.",
+          "tooLarge": "Soubor je příliš velký. Maximální velikost je 10MB.",
+          "uploadFailed": "Nepodařilo se nahrát profilový obrázek"
+        }
       }
     }
   },
   "administration": {
+    "analytics": {
+      "title": "Analytika",
+      "description": "Zobrazit metriky a statistiky platformy",
+      "userCount": "Celkem uživatelů",
+      "loading": "Načítám metriky...",
+      "error": "Nepodařilo se načíst metriky"
+    },
     "users": {
       "title": "Uživatelé",
       "description": "Správa uživatelů platformy a jejich oprávnění",

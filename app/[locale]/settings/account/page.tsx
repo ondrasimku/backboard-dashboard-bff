@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { ProfileForm } from "@/components/settings/profile-form";
+import { AvatarUpload } from "@/components/settings/avatar-upload";
 import { ChangePasswordForm } from "@/components/settings/change-password-form";
 import { Badge } from "@/components/ui/badge";
 import type { User } from "@/lib/types/user";
@@ -71,6 +72,16 @@ export default function AccountSettingsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
           <p className="text-muted-foreground">{t("description")}</p>
+        </div>
+
+        <div className="rounded-lg border bg-card p-6 shadow-sm">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold">{t("avatar.title") || "Profile Picture"}</h2>
+            <p className="text-sm text-muted-foreground">
+              {t("avatar.description") || "Upload and manage your profile picture"}
+            </p>
+          </div>
+          <AvatarUpload user={user} onUpdate={handleProfileUpdate} />
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">

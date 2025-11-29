@@ -38,11 +38,11 @@ export async function GET() {
   // Return response with user information
   return NextResponse.json({
     message: 'Authenticated successfully',
-    user: {
+    user: user ? {
       name: user.name,
       email: user.email,
       sub: user.sub,
-    },
+    } : undefined,
     organizationId: orgId,
     // Note: Never expose the full access token to the client
     hasAccessToken: !!accessToken,

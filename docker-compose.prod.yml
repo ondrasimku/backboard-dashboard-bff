@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  dashboard-bff:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: dashboard-bff-nextjs:prod
+    container_name: dashboard-bff-nextjs-prod
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      # NEXT_PUBLIC_API_URL: "https://api.example.com"
+      # MEDIA_SERVICE_URL: "http://media-service:8080"
+      # USER_SERVICE_URL: "http://user-service-express:3000"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - backboard-network
+
+networks:
+  backboard-network:
+    external: true

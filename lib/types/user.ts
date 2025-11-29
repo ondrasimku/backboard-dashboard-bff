@@ -5,6 +5,8 @@ export interface User {
   lastName: string;
   emailVerified: boolean;
   role: 'admin' | 'user';
+  avatarUrl?: string | null;
+  avatarFileId?: string | null;
   createdAt: string;
   updatedAt: string;
 }

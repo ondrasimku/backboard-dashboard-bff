@@ -132,10 +132,31 @@
         "title": "Account Information",
         "createdAt": "Account Created",
         "updatedAt": "Last Updated"
+      },
+      "avatar": {
+        "title": "Profile Picture",
+        "description": "Upload a JPEG, PNG, or WebP image (max 10MB)",
+        "select": "Select Image",
+        "upload": "Upload",
+        "uploading": "Uploading...",
+        "selected": "Selected",
+        "success": "Avatar uploaded successfully",
+        "error": {
+          "invalidType": "Invalid file type. Please upload a JPEG, PNG, or WebP image.",
+          "tooLarge": "File too large. Maximum size is 10MB.",
+          "uploadFailed": "Failed to upload avatar"
+        }
       }
     }
   },
   "administration": {
+    "analytics": {
+      "title": "Analytics",
+      "description": "View platform metrics and statistics",
+      "userCount": "Total Users",
+      "loading": "Loading metrics...",
+      "error": "Failed to load metrics"
+    },
     "users": {
       "title": "Users",
       "description": "Manage platform users and their permissions",
