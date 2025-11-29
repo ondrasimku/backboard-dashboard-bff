@@ -68,3 +68,23 @@ export interface PasswordResetResetResponse {
   message: string;
 }
 
+export interface GoogleOAuthRequest {
+  idToken: string;
+}
+
+export interface GoogleOAuthResponse {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    emailVerified: boolean;
+    role: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  token: string;
+  isNewUser: boolean;
+  accountLinked: boolean;
+}
+

@@ -1,4 +1,4 @@
-import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors, PasswordResetRequestRequest, PasswordResetRequestResponse, PasswordResetVerifyResponse, PasswordResetResetRequest, PasswordResetResetResponse } from '@/lib/types/auth';
+import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors, PasswordResetRequestRequest, PasswordResetRequestResponse, PasswordResetVerifyResponse, PasswordResetResetRequest, PasswordResetResetResponse, GoogleOAuthRequest, GoogleOAuthResponse } from '@/lib/types/auth';
 
 export class ApiValidationError extends Error {
   constructor(
@@ -222,6 +222,49 @@ class UserServiceApiClient {
     }
 
     return result as PasswordResetResetResponse;
+  }
+
+  async googleOAuth(data: GoogleOAuthRequest): Promise<GoogleOAuthResponse> {
+    const response = await fetch(`${this.baseUrl}/google`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    let result: GoogleOAuthResponse | ApiError;
+    try {
+      result = await response.json();
+    } catch {
+      throw new ApiValidationError(
+        'Invalid server response',
+        response.status,
+        'INVALID_RESPONSE'
+      );
+    }
+
+    if (!response.ok) {
+      const errorResult = result as ApiError;
+      
+      const validationErrors: ValidationErrors = {};
+      if (errorResult.details) {
+        Object.entries(errorResult.details).forEach(([key, messages]) => {
+          if (Array.isArray(messages) && messages.length > 0) {
+            validationErrors[key] = messages[0];
+          }
+        });
+      }
+
+      throw new ApiValidationError(
+        errorResult.error || 'Google OAuth failed',
+        response.status,
+        errorResult.code,
+        Object.keys(validationErrors).length > 0 ? validationErrors : undefined
+      );
+    }
+
+    return result as GoogleOAuthResponse;
   }
 }
 
