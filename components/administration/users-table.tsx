@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { User } from "@/lib/types/user";
 
@@ -36,6 +37,10 @@ export const UsersTable = ({ users, meta, onPageChange }: UsersTableProps) => {
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
   };
 
   const handleRowClick = (userId: string) => {
@@ -73,7 +78,17 @@ export const UsersTable = ({ users, meta, onPageChange }: UsersTableProps) => {
                   className="cursor-pointer"
                 >
                   <TableCell className="font-medium">
-                    {user.firstName} {user.lastName}
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={user.avatarUrl || undefined} alt={`${user.firstName} ${user.lastName}`} />
+                        <AvatarFallback>
+                          {getInitials(user.firstName, user.lastName)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>
+                        {user.firstName} {user.lastName}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>

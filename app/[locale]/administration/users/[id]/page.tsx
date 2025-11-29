@@ -8,6 +8,7 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, User as UserIcon, Mail, Shield, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import type { User } from "@/lib/types/user";
 
@@ -59,6 +60,10 @@ export default function UserDetailPage() {
     return new Date(dateString).toLocaleString();
   };
 
+  const getInitials = (firstName: string, lastName: string) => {
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+  };
+
   const handleBack = () => {
     router.push('/administration/users');
   };
@@ -99,9 +104,12 @@ export default function UserDetailPage() {
             <div className="rounded-lg border bg-card p-6 shadow-sm">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <UserIcon className="h-8 w-8 text-primary" />
-                  </div>
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={user.avatarUrl || undefined} alt={`${user.firstName} ${user.lastName}`} />
+                    <AvatarFallback className="text-lg">
+                      {getInitials(user.firstName, user.lastName)}
+                    </AvatarFallback>
+                  </Avatar>
                   <div>
                     <h2 className="text-2xl font-bold">
                       {user.firstName} {user.lastName}
