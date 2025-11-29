@@ -111,11 +111,19 @@ export default function AccountSettingsPage() {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                {t("profile.role")}
+                {t("profile.roles")}
               </p>
-              <Badge variant={user.role === "admin" ? "default" : "secondary"}>
-                {user.role.toUpperCase()}
-              </Badge>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {user.roles && user.roles.length > 0 ? (
+                  user.roles.map((role) => (
+                    <Badge key={role.id} variant="default">
+                      {role.name}
+                    </Badge>
+                  ))
+                ) : (
+                  <Badge variant="secondary">No roles</Badge>
+                )}
+              </div>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">

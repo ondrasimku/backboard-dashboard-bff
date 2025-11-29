@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     const page = searchParams.get('page') || '1';
     const limit = searchParams.get('limit') || '10';
     const search = searchParams.get('search') || '';
-    const role = searchParams.get('role') || '';
     const emailVerified = searchParams.get('emailVerified') || '';
 
     const userServiceUrl = process.env.USER_SERVICE_URL || 'http://user-service-express:3000';
@@ -17,7 +16,6 @@ export async function GET(request: NextRequest) {
       page,
       limit,
       ...(search && { search }),
-      ...(role && { role }),
       ...(emailVerified && { emailVerified }),
     });
 

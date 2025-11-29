@@ -5,12 +5,14 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from "@/i18n/navigation";
 import { useParams } from "next/navigation";
 import { DashboardLayout } from "@/components/dashboard/dashboard-layout";
+import { UserRolesManager } from "@/components/administration/user-roles-manager";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, User as UserIcon, Mail, Shield, Calendar, CheckCircle2, XCircle } from "lucide-react";
 import type { User } from "@/lib/types/user";
+import type { Role } from "@/lib/types/role";
 
 export default function UserDetailPage() {
   const t = useTranslations('administration.users.detail');
@@ -21,29 +23,48 @@ export default function UserDetailPage() {
   const userId = params.id as string;
 
   const [user, setUser] = useState<User | null>(null);
+  const [allRoles, setAllRoles] = useState<Role[]>([]);
+  const [userRoles, setUserRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`/api/users/${userId}`);
+        const [userResponse, rolesResponse, userRolesResponse] = await Promise.all([
+          fetch(`/api/users/${userId}`),
+          fetch('/api/admin/roles'),
+          fetch(`/api/admin/users/${userId}/roles`),
+        ]);
         
-        if (response.status === 404) {
+        if (userResponse.status === 404) {
           setError(t('notFound'));
           setLoading(false);
           return;
         }
 
-        if (!response.ok) {
+        if (!userResponse.ok) {
           throw new Error('Failed to fetch user');
         }
 
-        const data = await response.json();
-        setUser(data);
+        if (!rolesResponse.ok) {
+          throw new Error('Failed to fetch roles');
+        }
+
+        if (!userRolesResponse.ok) {
+          throw new Error('Failed to fetch user roles');
+        }
+
+        const userData = await userResponse.json();
+        const rolesData = await rolesResponse.json();
+        const userRolesData = await userRolesResponse.json();
+        
+        setUser(userData);
+        setAllRoles(rolesData);
+        setUserRoles(userRolesData);
       } catch (err) {
         setError(err instanceof Error ? err.message : t('error'));
       } finally {
@@ -52,7 +73,7 @@ export default function UserDetailPage() {
     };
 
     if (userId) {
-      fetchUser();
+      fetchData();
     }
   }, [userId, t]);
 
@@ -66,6 +87,54 @@ export default function UserDetailPage() {
 
   const handleBack = () => {
     router.push('/administration/users');
+  };
+
+  const handleAddRole = async (roleId: string) => {
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/roles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ roleId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to assign role');
+      }
+
+      // Refresh user roles
+      const rolesResponse = await fetch(`/api/admin/users/${userId}/roles`);
+      if (rolesResponse.ok) {
+        const updatedRoles = await rolesResponse.json();
+        setUserRoles(updatedRoles);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to assign role');
+    }
+  };
+
+  const handleRemoveRole = async (roleId: string) => {
+    try {
+      const response = await fetch(`/api/admin/users/${userId}/roles/${roleId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to remove role');
+      }
+
+      // Refresh user roles
+      const rolesResponse = await fetch(`/api/admin/users/${userId}/roles`);
+      if (rolesResponse.ok) {
+        const updatedRoles = await rolesResponse.json();
+        setUserRoles(updatedRoles);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to remove role');
+    }
   };
 
   return (
@@ -120,10 +189,16 @@ export default function UserDetailPage() {
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                    {tRoles(user.role)}
-                  </Badge>
+                <div className="flex gap-2 flex-wrap">
+                  {user.roles && user.roles.length > 0 ? (
+                    user.roles.map((role) => (
+                      <Badge key={role.id} variant="default">
+                        {role.name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <Badge variant="secondary">No roles</Badge>
+                  )}
                   <Badge variant={user.emailVerified ? 'success' : 'warning'}>
                     {user.emailVerified ? tStatus('verified') : tStatus('unverified')}
                   </Badge>
@@ -174,12 +249,20 @@ export default function UserDetailPage() {
                     </div>
                     <div>
                       <dt className="text-sm font-medium text-muted-foreground">
-                        {t('fields.role')}
+                        {t('fields.roles')}
                       </dt>
                       <dd className="text-sm mt-1">
-                        <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                          {tRoles(user.role)}
-                        </Badge>
+                        <div className="flex flex-wrap gap-1">
+                          {user.roles && user.roles.length > 0 ? (
+                            user.roles.map((role) => (
+                              <Badge key={role.id} variant="default">
+                                {role.name}
+                              </Badge>
+                            ))
+                          ) : (
+                            <Badge variant="secondary">No roles</Badge>
+                          )}
+                        </div>
                       </dd>
                     </div>
                     <div>
@@ -217,6 +300,16 @@ export default function UserDetailPage() {
                   </dl>
                 </div>
               </div>
+            </div>
+
+            <div className="rounded-lg border bg-card p-6 shadow-sm">
+              <UserRolesManager
+                user={user}
+                allRoles={allRoles}
+                userRoles={userRoles}
+                onAddRole={handleAddRole}
+                onRemoveRole={handleRemoveRole}
+              />
             </div>
           </div>
         )}

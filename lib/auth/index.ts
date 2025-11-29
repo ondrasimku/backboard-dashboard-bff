@@ -1,15 +1,11 @@
 import { NextResponse } from 'next/server';
-import { requireAuth } from './session';
+import { requireAuth, verifyToken, getAuthContext, AuthContext } from './session';
 
 export interface AuthCheckResult {
   authorized: boolean;
   response?: NextResponse;
   accessToken?: string;
-  user?: {
-    name?: string;
-    email?: string;
-    sub?: string;
-  };
+  authContext?: AuthContext;
 }
 
 export async function checkPermissionsMiddleware(
@@ -17,15 +13,31 @@ export async function checkPermissionsMiddleware(
 ): Promise<AuthCheckResult> {
   try {
     const accessToken = await requireAuth();
+    const authContext = await verifyToken(accessToken);
+
+    const userPermissions = authContext.permissions || [];
+    const hasAllPermissions = requiredPermissions.every(perm =>
+      userPermissions.includes(perm)
+    );
+
+    if (!hasAllPermissions) {
+      return {
+        authorized: false,
+        response: NextResponse.json(
+          {
+            error: 'Insufficient permissions',
+            required: requiredPermissions,
+            has: userPermissions,
+          },
+          { status: 403 }
+        ),
+      };
+    }
 
     return {
       authorized: true,
       accessToken,
-      user: {
-        sub: undefined,
-        email: undefined,
-        name: undefined,
-      },
+      authContext,
     };
   } catch (error) {
     if (error instanceof Error && error.message.includes('Unauthorized')) {
@@ -41,7 +53,7 @@ export async function checkPermissionsMiddleware(
     return {
       authorized: false,
       response: NextResponse.json(
-        { error: 'Internal server error' },
+        { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
         { status: 500 }
       ),
     };
@@ -50,11 +62,13 @@ export async function checkPermissionsMiddleware(
 
 export async function getOrganizationId(): Promise<string | null> {
   try {
-    await requireAuth();
-    return null;
+    const authContext = await getAuthContext();
+    return authContext?.orgId || null;
   } catch {
     return null;
   }
 }
+
+export { AuthContext } from './session';
 
 

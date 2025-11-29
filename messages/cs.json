@@ -14,6 +14,8 @@
     "team": "Tým",
     "administration": "Administrace",
     "users": "Uživatelé",
+    "roles": "Role",
+    "permissions": "Oprávnění",
     "settings": "Nastavení",
     "account": "Účet"
   },
@@ -109,6 +111,7 @@
         "lastName": "Příjmení",
         "email": "Emailová adresa",
         "role": "Role",
+        "roles": "Role",
         "emailVerified": "Email ověřen",
         "save": "Uložit změny",
         "saving": "Ukládám...",
@@ -205,13 +208,77 @@
           "lastName": "Příjmení",
           "email": "Emailová adresa",
           "role": "Role",
+          "roles": "Role",
           "emailVerified": "Email ověřen",
           "createdAt": "Účet vytvořen",
           "updatedAt": "Naposledy aktualizován"
         },
         "loading": "Načítám detail uživatele...",
         "error": "Nepodařilo se načíst detail uživatele",
-        "notFound": "Uživatel nenalezen"
+        "notFound": "Uživatel nenalezen",
+        "roles": {
+          "title": "Role uživatele",
+          "description": "Správa rolí přiřazených tomuto uživateli",
+          "assigned": "Přiřazené role",
+          "noAssigned": "Žádné role nejsou přiřazeny",
+          "addRole": "Přidat roli",
+          "selectRole": "Vyberte roli",
+          "add": "Přidat"
+        }
+      }
+    },
+    "roles": {
+      "title": "Role",
+      "description": "Správa rolí a jejich oprávnění",
+      "createRole": "Vytvořit roli",
+      "loading": "Načítám role...",
+      "error": "Nepodařilo se načíst role",
+      "noResults": "Nebyly nalezeny žádné role",
+      "deleteConfirm": "Opravdu chcete smazat tuto roli?",
+      "backToRoles": "Zpět na role",
+      "roleNotFound": "Role nenalezena",
+      "table": {
+        "name": "Název",
+        "description": "Popis",
+        "permissions": "Oprávnění",
+        "createdAt": "Vytvořeno",
+        "actions": "Akce"
+      },
+      "form": {
+        "createTitle": "Vytvořit roli",
+        "createDescription": "Vytvořte novou roli s konkrétními oprávněními",
+        "editTitle": "Upravit roli",
+        "editDescription": "Aktualizujte informace o roli",
+        "name": "Název role",
+        "namePlaceholder": "Zadejte název role",
+        "description": "Popis",
+        "descriptionPlaceholder": "Zadejte popis role (volitelné)",
+        "create": "Vytvořit",
+        "update": "Aktualizovat",
+        "cancel": "Zrušit",
+        "saving": "Ukládám...",
+        "error": "Došlo k chybě"
+      },
+      "permissions": {
+        "title": "Oprávnění role",
+        "description": "Přiřaďte oprávnění k této roli",
+        "assigned": "Přiřazená oprávnění",
+        "noAssigned": "Žádná oprávnění nejsou přiřazena",
+        "available": "Dostupná oprávnění",
+        "noAvailable": "Žádná dostupná oprávnění",
+        "searchPlaceholder": "Hledat oprávnění..."
+      }
+    },
+    "permissions": {
+      "title": "Oprávnění",
+      "description": "Zobrazit všechna dostupná oprávnění v systému",
+      "loading": "Načítám oprávnění...",
+      "error": "Nepodařilo se načíst oprávnění",
+      "noResults": "Nebyla nalezena žádná oprávnění",
+      "table": {
+        "name": "Oprávnění",
+        "description": "Popis",
+        "createdAt": "Vytvořeno"
       }
     }
   }

@@ -1,10 +1,12 @@
+import type { Role } from './role';
+
 export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   emailVerified: boolean;
-  role: 'admin' | 'user';
+  roles?: Role[];
   avatarUrl?: string | null;
   avatarFileId?: string | null;
   createdAt: string;

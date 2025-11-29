@@ -49,6 +49,7 @@ import {
 import { bffAuthClient } from "@/lib/clients/bff-auth-client";
 import { useState, useEffect } from "react";
 import type { User } from "@/lib/types/user";
+import { KeyRound, ShieldCheck } from "lucide-react";
 
 export const AppSidebar = () => {
   const pathname = usePathname();
@@ -109,6 +110,8 @@ export const AppSidebar = () => {
   const [userCount, setUserCount] = useState<number | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userLoading, setUserLoading] = useState(true);
+  const [hasRolesPermission, setHasRolesPermission] = useState(false);
+  const [hasPermissionsPermission, setHasPermissionsPermission] = useState(false);
 
   useEffect(() => {
     const fetchUserCount = async () => {
@@ -142,7 +145,21 @@ export const AppSidebar = () => {
       }
     };
 
+    const checkPermissions = async () => {
+      try {
+        const response = await fetch('/api/auth/permissions');
+        if (response.ok) {
+          const data = await response.json();
+          setHasRolesPermission(data.permissions?.includes('roles:manage') || false);
+          setHasPermissionsPermission(data.permissions?.includes('permissions:manage') || false);
+        }
+      } catch (error) {
+        console.error('Failed to check permissions:', error);
+      }
+    };
+
     fetchUser();
+    checkPermissions();
   }, []);
 
   const getInitials = (firstName: string, lastName: string) => {
@@ -161,6 +178,16 @@ export const AppSidebar = () => {
       href: "/administration/users",
       icon: Users,
     },
+    ...(hasRolesPermission ? [{
+      title: t('roles'),
+      href: "/administration/roles",
+      icon: ShieldCheck,
+    }] : []),
+    ...(hasPermissionsPermission ? [{
+      title: t('permissions'),
+      href: "/administration/permissions",
+      icon: KeyRound,
+    }] : []),
   ];
 
   return (

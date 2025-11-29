@@ -92,9 +92,17 @@ export const UsersTable = ({ users, meta, onPageChange }: UsersTableProps) => {
                   </TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
-                      {tRoles(user.role)}
-                    </Badge>
+                    <div className="flex flex-wrap gap-1">
+                      {user.roles && user.roles.length > 0 ? (
+                        user.roles.map((role) => (
+                          <Badge key={role.id} variant="default">
+                            {role.name}
+                          </Badge>
+                        ))
+                      ) : (
+                        <Badge variant="secondary">No roles</Badge>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant={user.emailVerified ? 'success' : 'warning'}>
