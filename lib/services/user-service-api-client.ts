@@ -1,4 +1,4 @@
-import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors, PasswordResetRequestRequest, PasswordResetRequestResponse, PasswordResetVerifyResponse, PasswordResetResetRequest, PasswordResetResetResponse, GoogleOAuthRequest, GoogleOAuthResponse } from '@/lib/types/auth';
+import type { RegisterRequest, RegisterResponse, LoginRequest, LoginResponse, ApiError, ValidationErrors, PasswordResetRequestRequest, PasswordResetRequestResponse, PasswordResetVerifyResponse, PasswordResetResetRequest, PasswordResetResetResponse, GoogleOAuthRequest, GoogleOAuthResponse, EmailVerificationResponse } from '@/lib/types/auth';
 
 export class ApiValidationError extends Error {
   constructor(
@@ -265,6 +265,38 @@ class UserServiceApiClient {
     }
 
     return result as GoogleOAuthResponse;
+  }
+
+  async verifyEmail(token: string): Promise<EmailVerificationResponse> {
+    const response = await fetch(`${this.baseUrl}/verify/${token}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    let result: EmailVerificationResponse | ApiError;
+    try {
+      result = await response.json();
+    } catch {
+      throw new ApiValidationError(
+        'Invalid server response',
+        response.status,
+        'INVALID_RESPONSE'
+      );
+    }
+
+    if (!response.ok) {
+      const errorResult = result as ApiError;
+
+      throw new ApiValidationError(
+        errorResult.error || 'Email verification failed',
+        response.status,
+        errorResult.code
+      );
+    }
+
+    return result as EmailVerificationResponse;
   }
 }
 

@@ -88,3 +88,8 @@ export interface GoogleOAuthResponse {
   accountLinked: boolean;
 }
 
+export interface EmailVerificationResponse {
+  success: boolean;
+  message: string;
+}
+
