@@ -54,6 +54,13 @@ export const TiptapEditor = ({
         heading: {
           levels: [1, 2, 3],
         },
+        codeBlock: {
+          exitOnTripleEnter: true,
+          exitOnArrowDown: true,
+          HTMLAttributes: {
+            class: 'bg-muted p-4 rounded-lg overflow-x-auto my-4 font-mono',
+          },
+        },
       }),
       Link.configure({
         openOnClick: false,
@@ -85,8 +92,8 @@ export const TiptapEditor = ({
           '[&_li]:mb-1',
           '[&_blockquote]:border-l-4 [&_blockquote]:border-muted [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:my-4',
           '[&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:font-mono',
-          '[&_pre]:bg-muted [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:my-4',
-          '[&_pre_code]:bg-transparent [&_pre_code]:p-0',
+          '[&_pre]:bg-muted [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_pre]:my-4 [&_pre]:font-mono',
+          '[&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:font-mono',
           '[&_a]:text-primary [&_a]:underline [&_a]:cursor-pointer',
           '[&_strong]:font-semibold',
           '[&_em]:italic'
@@ -109,12 +116,6 @@ export const TiptapEditor = ({
       onEditorReady(editor);
     }
   }, [editor, onEditorReady]);
-
-  useEffect(() => {
-    if (editor && content && editor.getJSON() !== content) {
-      editor.commands.setContent(content);
-    }
-  }, [content, editor]);
 
   const setLink = useCallback(() => {
     if (!editor) return;
@@ -151,8 +152,8 @@ export const TiptapEditor = ({
         '[&_.ProseMirror_li]:mb-1',
         '[&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-muted [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_blockquote]:my-4',
         '[&_.ProseMirror_code]:bg-muted [&_.ProseMirror_code]:px-1.5 [&_.ProseMirror_code]:py-0.5 [&_.ProseMirror_code]:rounded [&_.ProseMirror_code]:text-sm [&_.ProseMirror_code]:font-mono',
-        '[&_.ProseMirror_pre]:bg-muted [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_pre]:my-4',
-        '[&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:p-0',
+        '[&_.ProseMirror_pre]:bg-muted [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded-lg [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_pre]:my-4 [&_.ProseMirror_pre]:font-mono',
+        '[&_.ProseMirror_pre_code]:bg-transparent [&_.ProseMirror_pre_code]:p-0 [&_.ProseMirror_pre_code]:font-mono',
         '[&_.ProseMirror_a]:text-primary [&_.ProseMirror_a]:underline [&_.ProseMirror_a]:cursor-pointer',
         '[&_.ProseMirror_strong]:font-semibold',
         '[&_.ProseMirror_em]:italic',

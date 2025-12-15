@@ -10,7 +10,10 @@ import { TiptapEditor } from '@/components/pages/tiptap-editor';
 import { EditorToolbar } from '@/components/pages/editor-toolbar';
 import { PublishDialog } from '@/components/pages/publish-dialog';
 import { BacklinksPanel } from '@/components/pages/backlinks-panel';
-import { Page, PageLinks } from '@/lib/types/page';
+import { ResizableFolderTreeSidebar } from '@/components/pages/resizable-folder-tree-sidebar';
+import { CreateFolderDialog } from '@/components/pages/create-folder-dialog';
+import { CreatePageDialog } from '@/components/pages/create-page-dialog';
+import { Page, PageLinks, Folder } from '@/lib/types/page';
 import {
   ArrowLeft,
   Globe,
@@ -54,13 +57,21 @@ export default function PageEditor({ params }: PageEditorProps) {
   const [backlinks, setBacklinks] = useState<PageLinks | null>(null);
   const [saveTimeout, setSaveTimeout] = useState<NodeJS.Timeout | null>(null);
   const [editor, setEditor] = useState<any>(null);
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [allPages, setAllPages] = useState<Page[]>([]);
+  const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [showCreatePage, setShowCreatePage] = useState(false);
+  const [targetFolderId, setTargetFolderId] = useState<string | null>(null);
+  const [targetParentId, setTargetParentId] = useState<string | null>(null);
 
   const loadPage = async () => {
     setIsLoading(true);
     try {
-      const [pageRes, linksRes] = await Promise.all([
+      const [pageRes, linksRes, foldersRes, pagesRes] = await Promise.all([
         fetch(`/api/pages/${id}`),
         fetch(`/api/pages/${id}/links`),
+        fetch('/api/folders'),
+        fetch('/api/pages'),
       ]);
 
       if (!pageRes.ok) {
@@ -75,6 +86,16 @@ export default function PageEditor({ params }: PageEditorProps) {
       if (linksRes.ok) {
         const linksData = await linksRes.json();
         setBacklinks(linksData);
+      }
+
+      if (foldersRes.ok) {
+        const foldersData = await foldersRes.json();
+        setFolders(foldersData);
+      }
+
+      if (pagesRes.ok) {
+        const pagesData = await pagesRes.json();
+        setAllPages(pagesData);
       }
     } catch (error) {
       console.error('Error loading page:', error);
@@ -191,6 +212,52 @@ export default function PageEditor({ params }: PageEditorProps) {
     }
   };
 
+  const handleAddPage = (folderId: string | null) => {
+    setTargetFolderId(folderId);
+    setShowCreatePage(true);
+  };
+
+  const handleAddFolder = (parentId: string | null) => {
+    setTargetParentId(parentId);
+    setShowCreateFolder(true);
+  };
+
+  const handleDeleteFolder = async (folderId: string) => {
+    try {
+      const response = await fetch(`/api/folders/${folderId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete folder');
+      }
+
+      toast.success('Folder moved to bin');
+      await loadPage();
+    } catch (error) {
+      console.error('Error deleting folder:', error);
+      toast.error('Failed to delete folder');
+    }
+  };
+
+  const handleDeletePage = async (pageId: string) => {
+    try {
+      const response = await fetch(`/api/pages/${pageId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete page');
+      }
+
+      toast.success('Page moved to bin');
+      await loadPage();
+    } catch (error) {
+      console.error('Error deleting page:', error);
+      toast.error('Failed to delete page');
+    }
+  };
+
   if (isLoading) {
     return (
       <DashboardLayout>
@@ -209,9 +276,25 @@ export default function PageEditor({ params }: PageEditorProps) {
 
   return (
     <DashboardLayout>
-      <div className="h-full flex flex-col">
-        {/* Header */}
-        <div className="border-b bg-background sticky top-0 z-10">
+      <div className="flex h-full">
+        {/* Sidebar with folder tree */}
+        <ResizableFolderTreeSidebar
+          folders={folders}
+          pages={allPages}
+          currentPageId={id}
+          isLoading={isLoading}
+          onAddPage={handleAddPage}
+          onAddFolder={handleAddFolder}
+          onDeleteFolder={handleDeleteFolder}
+          onDeletePage={handleDeletePage}
+          onRefresh={loadPage}
+          storageKey="pageEditorSidebarWidth"
+        />
+
+        {/* Main editor area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Header */}
+          <div className="border-b bg-background sticky top-0 z-10">
           <div className="flex items-center justify-between px-8 py-3 border-b">
             <div className="flex items-center gap-4">
               <Button
@@ -222,25 +305,33 @@ export default function PageEditor({ params }: PageEditorProps) {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 {t('backToPages')}
               </Button>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                {saveStatus === 'saving' && (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>{t('saving')}</span>
-                  </>
-                )}
-                {saveStatus === 'saved' && (
-                  <>
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>{t('saved')}</span>
-                  </>
-                )}
-                {saveStatus === 'error' && (
-                  <>
-                    <AlertCircle className="h-4 w-4 text-destructive" />
-                    <span>Error saving</span>
-                  </>
-                )}
+              <div className="flex items-center gap-3">
+                <Input
+                  value={title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  placeholder={t('untitled')}
+                  className="text-base font-semibold border-0 shadow-none px-2 py-1 focus-visible:ring-1 focus-visible:ring-ring h-auto w-auto min-w-[200px] max-w-[400px]"
+                />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  {saveStatus === 'saving' && (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span>{t('saving')}</span>
+                    </>
+                  )}
+                  {saveStatus === 'saved' && (
+                    <>
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span>{t('saved')}</span>
+                    </>
+                  )}
+                  {saveStatus === 'error' && (
+                    <>
+                      <AlertCircle className="h-4 w-4 text-destructive" />
+                      <span>Error saving</span>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -305,14 +396,6 @@ export default function PageEditor({ params }: PageEditorProps) {
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-4xl mx-auto px-8 py-8">
-            {/* Title */}
-            <Input
-              value={title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              placeholder={t('untitled')}
-              className="text-4xl font-bold border-0 shadow-none px-0 mb-8 focus-visible:ring-0 h-auto"
-            />
-
             {/* Editor */}
             <TiptapEditor
               content={content}
@@ -329,6 +412,7 @@ export default function PageEditor({ params }: PageEditorProps) {
               </div>
             )}
           </div>
+        </div>
         </div>
       </div>
 
@@ -359,6 +443,24 @@ export default function PageEditor({ params }: PageEditorProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Create Folder Dialog */}
+      <CreateFolderDialog
+        open={showCreateFolder}
+        onOpenChange={setShowCreateFolder}
+        folders={folders}
+        onSuccess={loadPage}
+        preselectedParentId={targetParentId}
+      />
+
+      {/* Create Page Dialog */}
+      <CreatePageDialog
+        open={showCreatePage}
+        onOpenChange={setShowCreatePage}
+        folders={folders}
+        onSuccess={loadPage}
+        preselectedFolderId={targetFolderId}
+      />
     </DashboardLayout>
   );
 }

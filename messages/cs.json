@@ -155,7 +155,7 @@
   },
   "pages": {
     "title": "Stránky",
-    "description": "Spravujte své stránky podobné Notion",
+    "description": "Organizujte a spravujte své stránky a dokumenty",
     "newPage": "Nová stránka",
     "newFolder": "Nová složka",
     "search": "Hledat stránky...",
@@ -165,6 +165,21 @@
     "root": "Kořen",
     "loading": "Načítám stránky...",
     "error": "Nepodařilo se načíst stránky",
+    "stats": {
+      "totalFolders": "Celkem složek",
+      "totalPages": "Celkem stránek",
+      "binItems": "Položky v koši"
+    },
+    "quickAccess": {
+      "title": "Rychlý přístup",
+      "folders": "Složky",
+      "rootPages": "Kořenové stránky",
+      "viewAll": "Zobrazit vše",
+      "itemsInFolder": "{count, plural, =0 {Prázdná} =1 {1 položka} few {# položky} other {# položek}}"
+    },
+    "recentPages": {
+      "title": "Nedávné stránky"
+    },
     "folder": {
       "create": "Vytvořit složku",
       "edit": "Upravit složku",
@@ -256,6 +271,26 @@
       "notFound": "Stránka nenalezena",
       "notFoundDescription": "Tato stránka neexistuje nebo není publikována",
       "backToHome": "Zpět na úvodní stránku"
+    },
+    "bin": {
+      "title": "Koš",
+      "description": "Smazané položky jsou uchovány zde. Můžete je obnovit nebo trvale smazat.",
+      "emptyBin": "Vyprázdnit koš",
+      "empty": "Koš je prázdný",
+      "emptyDescription": "Smazané stránky a složky se objeví zde",
+      "folders": "Složky",
+      "pages": "Stránky",
+      "restore": "Obnovit",
+      "deletePermanently": "Trvale smazat",
+      "deleteConfirm": "Tato položka bude trvale smazána a nelze ji obnovit. Jste si jisti?",
+      "emptyConfirm": "Všechny položky v koši budou trvale smazány. Tuto akci nelze vrátit zpět. Jste si jisti?",
+      "deleted": "Smazáno",
+      "restoreSuccess": "Položka byla úspěšně obnovena",
+      "restoreError": "Nepodařilo se obnovit položku",
+      "deleteSuccess": "Položka byla trvale smazána",
+      "deleteError": "Nepodařilo se smazat položku",
+      "emptySuccess": "Koš byl úspěšně vyprázdněn",
+      "emptyError": "Nepodařilo se vyprázdnit koš"
     }
   },
   "administration": {

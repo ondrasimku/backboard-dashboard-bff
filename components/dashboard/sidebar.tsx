@@ -233,10 +233,11 @@ export const AppSidebar = () => {
                       asChild
                       isActive={isActive}
                       tooltip={item.title}
+                      className="cursor-pointer"
                     >
                       <Link href={item.href}>
                         <Icon className="h-4 w-4" />
-                        <span>{item.title}</span>
+                        <span className="select-none">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -250,9 +251,9 @@ export const AppSidebar = () => {
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={t('administration')}>
+                    <SidebarMenuButton tooltip={t('administration')} className="cursor-pointer">
                       <Shield className="h-4 w-4" />
-                      <span>{t('administration')}</span>
+                      <span className="select-none">{t('administration')}</span>
                       <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -267,12 +268,13 @@ export const AppSidebar = () => {
                             <SidebarMenuSubButton
                               asChild
                               isActive={isActive}
+                              className="cursor-pointer"
                             >
                               <Link href={item.href}>
                                 <Icon className="h-4 w-4" />
-                                <span>{item.title}</span>
+                                <span className="select-none">{item.title}</span>
                                 {item.badge && (
-                                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                                  <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground select-none">
                                     {item.badge}
                                   </span>
                                 )}
@@ -293,9 +295,9 @@ export const AppSidebar = () => {
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={t('settings')}>
+                    <SidebarMenuButton tooltip={t('settings')} className="cursor-pointer">
                       <Settings className="h-4 w-4" />
-                      <span>{t('settings')}</span>
+                      <span className="select-none">{t('settings')}</span>
                       <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -310,10 +312,11 @@ export const AppSidebar = () => {
                             <SidebarMenuSubButton
                               asChild
                               isActive={isActive}
+                              className="cursor-pointer"
                             >
                               <Link href={item.href}>
                                 <Icon className="h-4 w-4" />
-                                <span>{item.title}</span>
+                                <span className="select-none">{item.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
@@ -355,7 +358,7 @@ export const AppSidebar = () => {
                 <DropdownMenuItem asChild>
                   <Link href="/settings/account" className="cursor-pointer">
                     <UserCog className="mr-2 h-4 w-4" />
-                    <span>{t('account')}</span>
+                    <span className="select-none">{t('account')}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -365,7 +368,7 @@ export const AppSidebar = () => {
                   className="cursor-pointer text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>{isLoggingOut ? tCommon('loggingOut') : tCommon('logout')}</span>
+                  <span className="select-none">{isLoggingOut ? tCommon('loggingOut') : tCommon('logout')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

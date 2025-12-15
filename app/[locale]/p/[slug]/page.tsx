@@ -52,11 +52,6 @@ export default async function PublicPage({ params }: PublicPageProps) {
       {/* Content */}
       <main className="container mx-auto px-4 py-12">
         <article className="max-w-4xl mx-auto">
-          {/* Title */}
-          <h1 className="text-4xl font-bold tracking-tight mb-8">
-            {page.title}
-          </h1>
-
           {/* Page Content */}
           <PublicPageContent content={page.content || {}} />
 

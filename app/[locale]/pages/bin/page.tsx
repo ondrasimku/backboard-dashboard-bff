@@ -6,11 +6,11 @@ import { useRouter } from '@/i18n/navigation';
 import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FolderTree } from '@/components/pages/folder-tree';
+import { ResizableFolderTreeSidebar } from '@/components/pages/resizable-folder-tree-sidebar';
 import { CreateFolderDialog } from '@/components/pages/create-folder-dialog';
 import { CreatePageDialog } from '@/components/pages/create-page-dialog';
 import { BinItem, Page, Folder } from '@/lib/types/page';
-import { FolderIcon, FileText, Trash2, RotateCcw, AlertCircle } from 'lucide-react';
+import { FolderIcon, FileText, Trash2, RotateCcw, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -224,54 +224,50 @@ export default function BinPage() {
     <DashboardLayout>
       <div className="flex h-full">
         {/* Sidebar with folder tree */}
-        <div className="w-64 flex-shrink-0 border-r bg-muted/30 flex flex-col overflow-hidden">
-          <div className="p-4 pb-2">
-            <p className="text-xs text-muted-foreground">
-              Navigate your pages and folders
-            </p>
-          </div>
-
-          {isLoading ? (
-            <div className="px-4 space-y-2">
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-              <Skeleton className="h-8 w-full" />
-            </div>
-          ) : (
-            <div className="flex-1 min-h-0 flex flex-col">
-              <FolderTree
-                folders={folders}
-                pages={pages}
-                onAddPage={handleAddPage}
-                onAddFolder={handleAddFolder}
-                onDeleteFolder={handleDeleteFolder}
-                onDeletePage={handleDeletePage}
-                onRefresh={loadData}
-              />
-            </div>
-          )}
-        </div>
+        <ResizableFolderTreeSidebar
+          folders={folders}
+          pages={pages}
+          isLoading={isLoading}
+          onAddPage={handleAddPage}
+          onAddFolder={handleAddFolder}
+          onDeleteFolder={handleDeleteFolder}
+          onDeletePage={handleDeletePage}
+          onRefresh={loadData}
+          storageKey="binSidebarWidth"
+          description="Navigate your pages and folders"
+        />
 
         {/* Main content */}
         <div className="flex-1 overflow-y-auto">
           <div className="p-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight">Bin</h1>
-                <p className="text-muted-foreground mt-1">
-                  Deleted items are kept here. You can restore them or delete permanently.
-                </p>
+            <div className="mb-6">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push('/pages')}
+                className="mb-4"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back to Pages
+              </Button>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-3xl font-bold tracking-tight">Bin</h1>
+                  <p className="text-muted-foreground mt-1">
+                    Deleted items are kept here. You can restore them or delete permanently.
+                  </p>
+                </div>
+                {binItems.length > 0 && (
+                  <Button
+                    variant="destructive"
+                    onClick={() => setShowEmptyDialog(true)}
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Empty Bin
+                  </Button>
+                )}
               </div>
-              {binItems.length > 0 && (
-                <Button
-                  variant="destructive"
-                  onClick={() => setShowEmptyDialog(true)}
-                >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Empty Bin
-                </Button>
-              )}
             </div>
 
             {/* Content */}

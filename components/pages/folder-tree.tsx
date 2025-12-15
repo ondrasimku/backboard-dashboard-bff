@@ -106,9 +106,9 @@ const PageItem = ({ page, level, isActive, onDeletePage }: PageItemProps) => {
           variant="ghost"
           size="sm"
           className={cn(
-            'flex-1 justify-start gap-2 px-2 h-8 min-w-0 hover:bg-transparent',
+            'flex-1 justify-start gap-2 px-2 h-8 min-w-0 hover:bg-transparent cursor-pointer',
           )}
-          style={{ paddingLeft: `${level * 16 + 8}px` }}
+          style={{ paddingLeft: `${level * 16 + 24}px` }}
           onClick={() => router.push(`/pages/${page.id}`)}
         >
           <div 
@@ -119,7 +119,7 @@ const PageItem = ({ page, level, isActive, onDeletePage }: PageItemProps) => {
             <GripVertical className="h-4 w-4 text-muted-foreground/50 hover:text-muted-foreground" />
           </div>
           <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-          <span className="text-sm truncate min-w-0 text-left">{page.title}</span>
+          <span className="text-sm truncate min-w-0 text-left select-none">{page.title}</span>
           {page.isPublished && (
             <Badge variant="secondary" className="h-4 px-1 text-[10px] flex-shrink-0 ml-auto">
               <Globe className="h-2.5 w-2.5" />
@@ -132,7 +132,7 @@ const PageItem = ({ page, level, isActive, onDeletePage }: PageItemProps) => {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 group-hover:bg-muted/70 hover:bg-muted/50"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 group-hover:bg-muted/70 hover:bg-muted/50 cursor-pointer"
               onClick={(e) => e.stopPropagation()}
             >
               <MoreVertical className="h-4 w-4" />
@@ -141,10 +141,10 @@ const PageItem = ({ page, level, isActive, onDeletePage }: PageItemProps) => {
           <DropdownMenuContent align="end">
             <DropdownMenuItem 
               onClick={() => setShowDeleteDialog(true)}
-              className="text-destructive focus:text-destructive"
+              className="text-destructive focus:text-destructive cursor-pointer"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Delete
+              <span className="select-none">Delete</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -230,7 +230,7 @@ const FolderItem = ({ folder, pages, currentPageId, onAddPage, onAddFolder, onDe
           <Button
             variant="ghost"
             size="sm"
-            className="flex-1 justify-start gap-2 px-2 h-8 min-w-0 hover:bg-transparent"
+            className="flex-1 justify-start gap-2 px-2 h-8 min-w-0 hover:bg-transparent cursor-pointer"
             style={{ paddingLeft: `${level * 16 + 8}px` }}
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -257,7 +257,7 @@ const FolderItem = ({ folder, pages, currentPageId, onAddPage, onAddFolder, onDe
             ) : (
               <Folder className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             )}
-            <span className="text-sm truncate min-w-0">{folder.name}</span>
+            <span className="text-sm truncate min-w-0 select-none">{folder.name}</span>
           </Button>
           
           <DropdownMenu>
@@ -265,28 +265,28 @@ const FolderItem = ({ folder, pages, currentPageId, onAddPage, onAddFolder, onDe
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 group-hover:bg-muted/70 hover:bg-muted/50"
+                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 group-hover:bg-muted/70 hover:bg-muted/50 cursor-pointer"
                 onClick={(e) => e.stopPropagation()}
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onAddPage(folder.id)}>
+              <DropdownMenuItem onClick={() => onAddPage(folder.id)} className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                Add Page
+                <span className="select-none">Add Page</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onAddFolder(folder.id)}>
+              <DropdownMenuItem onClick={() => onAddFolder(folder.id)} className="cursor-pointer">
                 <FolderPlus className="h-4 w-4 mr-2" />
-                Add Subfolder
+                <span className="select-none">Add Subfolder</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem 
                 onClick={() => setShowDeleteDialog(true)}
-                className="text-destructive focus:text-destructive"
+                className="text-destructive focus:text-destructive cursor-pointer"
               >
                 <Trash2 className="h-4 w-4 mr-2" />
-                Delete
+                <span className="select-none">Delete</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -366,15 +366,15 @@ const BinDropZone = ({ binCount, onClick }: BinDropZoneProps) => {
         variant="ghost"
         size="sm"
         className={cn(
-          "w-full justify-start gap-2 px-2 h-8 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-all",
+          "w-full justify-start gap-2 px-2 h-8 bg-red-50 hover:bg-red-100 dark:bg-red-950/30 dark:hover:bg-red-950/50 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-all cursor-pointer",
           isOver && "bg-red-200 dark:bg-red-900/70 scale-105 shadow-lg border-2 border-red-500 dark:border-red-400"
         )}
         onClick={onClick}
       >
         <Trash2 className={cn("h-4 w-4 flex-shrink-0", isOver && "animate-bounce")} />
-        <span className="text-sm flex-1 text-left">Bin</span>
+        <span className="text-sm flex-1 text-left select-none">Bin</span>
         {binCount > 0 && (
-          <Badge variant="secondary" className="h-5 px-2 text-xs bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300">
+          <Badge variant="secondary" className="h-5 px-2 text-xs bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 select-none">
             {binCount}
           </Badge>
         )}
@@ -604,27 +604,30 @@ export const FolderTree = ({
       >
         {/* Root level context menu */}
         <div className="flex items-center group rounded hover:bg-muted/70">
-          <div className="flex-1 px-2 py-1">
-            <span className="text-sm font-semibold">{t('title')}</span>
+          <div 
+            className="flex-1 px-2 py-1 cursor-pointer"
+            onClick={() => router.push('/pages')}
+          >
+            <span className="text-sm font-semibold select-none">{t('title')}</span>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity group-hover:bg-muted/70 hover:bg-muted/50"
+                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity group-hover:bg-muted/70 hover:bg-muted/50 cursor-pointer"
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onAddPage(null)}>
+              <DropdownMenuItem onClick={() => onAddPage(null)} className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                Add Page
+                <span className="select-none">Add Page</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onAddFolder(null)}>
+              <DropdownMenuItem onClick={() => onAddFolder(null)} className="cursor-pointer">
                 <FolderPlus className="h-4 w-4 mr-2" />
-                Add Folder
+                <span className="select-none">Add Folder</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
