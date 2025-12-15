@@ -78,6 +78,11 @@ export const AppSidebar = () => {
       icon: LayoutDashboard,
     },
     {
+      title: t('pages'),
+      href: "/pages",
+      icon: FileText,
+    },
+    {
       title: t('projects'),
       href: "/projects",
       icon: FolderKanban,

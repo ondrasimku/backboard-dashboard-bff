@@ -7,6 +7,7 @@
   },
   "nav": {
     "dashboard": "Přehled",
+    "pages": "Stránky",
     "projects": "Projekty",
     "datasets": "Datové sady",
     "analytics": "Analytika",
@@ -150,6 +151,111 @@
           "uploadFailed": "Nepodařilo se nahrát profilový obrázek"
         }
       }
+    }
+  },
+  "pages": {
+    "title": "Stránky",
+    "description": "Spravujte své stránky podobné Notion",
+    "newPage": "Nová stránka",
+    "newFolder": "Nová složka",
+    "search": "Hledat stránky...",
+    "noPages": "Zatím žádné stránky",
+    "createFirst": "Vytvořte svou první stránku",
+    "allPages": "Všechny stránky",
+    "root": "Kořen",
+    "loading": "Načítám stránky...",
+    "error": "Nepodařilo se načíst stránky",
+    "folder": {
+      "create": "Vytvořit složku",
+      "edit": "Upravit složku",
+      "name": "Název složky",
+      "namePlaceholder": "Zadejte název složky",
+      "parent": "Nadřazená složka",
+      "selectParent": "Vyberte nadřazenou složku",
+      "noParent": "Bez nadřazené (kořenová úroveň)",
+      "creating": "Vytvářím...",
+      "updating": "Aktualizuji...",
+      "deleting": "Mažu...",
+      "success": "Složka byla úspěšně uložena",
+      "deleteSuccess": "Složka byla úspěšně smazána",
+      "error": "Nepodařilo se uložit složku",
+      "deleteError": "Nepodařilo se smazat složku",
+      "cancel": "Zrušit",
+      "delete": "Smazat složku",
+      "deleteConfirm": "Opravdu chcete smazat tuto složku? Stránky uvnitř budou přesunuty do kořene."
+    },
+    "page": {
+      "create": "Vytvořit stránku",
+      "title": "Název stránky",
+      "titlePlaceholder": "Zadejte název stránky",
+      "folder": "Složka",
+      "selectFolder": "Vyberte složku",
+      "noFolder": "Žádná složka",
+      "creating": "Vytvářím...",
+      "created": "Stránka byla úspěšně vytvořena",
+      "error": "Nepodařilo se vytvořit stránku",
+      "cancel": "Zrušit"
+    },
+    "editor": {
+      "untitled": "Bez názvu",
+      "saving": "Ukládám...",
+      "saved": "Uloženo",
+      "publish": "Publikovat",
+      "unpublish": "Zrušit publikování",
+      "delete": "Smazat stránku",
+      "backToPages": "Zpět na stránky",
+      "placeholder": "Začněte psát...",
+      "deleteConfirm": "Opravdu chcete smazat tuto stránku? Tuto akci nelze vrátit zpět.",
+      "deleting": "Mažu...",
+      "deleteSuccess": "Stránka byla úspěšně smazána",
+      "deleteError": "Nepodařilo se smazat stránku",
+      "moveToFolder": "Přesunout do složky",
+      "toolbar": {
+        "bold": "Tučné",
+        "italic": "Kurzíva",
+        "strike": "Přeškrtnuté",
+        "code": "Kód",
+        "heading1": "Nadpis 1",
+        "heading2": "Nadpis 2",
+        "heading3": "Nadpis 3",
+        "bulletList": "Odrážkový seznam",
+        "orderedList": "Číslovaný seznam",
+        "blockquote": "Citace",
+        "codeBlock": "Blok kódu",
+        "link": "Přidat odkaz",
+        "undo": "Zpět",
+        "redo": "Znovu"
+      }
+    },
+    "publish": {
+      "title": "Publikovat stránku",
+      "description": "Zpřístupněte tuto stránku veřejně pomocí unikátní URL",
+      "slug": "Veřejná URL slug",
+      "slugPlaceholder": "moje-uzasna-stranka",
+      "slugHelp": "Používejte pouze malá písmena, čísla a pomlčky",
+      "preview": "Vaše stránka bude dostupná na:",
+      "publish": "Publikovat",
+      "publishing": "Publikuji...",
+      "unpublishing": "Ruším publikování...",
+      "cancel": "Zrušit",
+      "success": "Stránka byla úspěšně publikována",
+      "unpublishSuccess": "Publikování stránky bylo zrušeno",
+      "error": "Nepodařilo se publikovat stránku",
+      "unpublishError": "Nepodařilo se zrušit publikování",
+      "invalidSlug": "Neplatný formát slug",
+      "slugTaken": "Tento slug je již používán"
+    },
+    "backlinks": {
+      "title": "Zpětné odkazy",
+      "description": "Stránky, které odkazují na tuto stránku",
+      "noBacklinks": "Zatím zde neodkazují žádné stránky",
+      "outgoing": "Odkazy z této stránky",
+      "incoming": "Odkazy na tuto stránku"
+    },
+    "public": {
+      "notFound": "Stránka nenalezena",
+      "notFoundDescription": "Tato stránka neexistuje nebo není publikována",
+      "backToHome": "Zpět na úvodní stránku"
     }
   },
   "administration": {

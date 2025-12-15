@@ -69,6 +69,4 @@ export async function getOrganizationId(): Promise<string | null> {
   }
 }
 
-export { AuthContext } from './session';
-
-
+export type { AuthContext } from './session';

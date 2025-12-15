@@ -1,0 +1,47 @@
+import { NextResponse, NextRequest } from 'next/server';
+import { requireAuth } from '@/lib/auth/session';
+
+interface RouteParams {
+  params: Promise<{ id: string }>;
+}
+
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
+  try {
+    const token = await requireAuth();
+    const { id } = await params;
+    const pagesServiceUrl = process.env.PAGES_SERVICE_URL || 'http://pages-service-express:3002';
+
+    const response = await fetch(`${pagesServiceUrl}/api/bin/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: 'Failed to delete bin item' }));
+      return NextResponse.json(
+        { error: error.error || error.message || 'Failed to delete bin item', code: error.code },
+        { status: response.status }
+      );
+    }
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error('Error in DELETE /api/bin/:id:', error);
+    
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
+  }
+}

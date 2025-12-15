@@ -21,7 +21,7 @@ export async function GET() {
   }
 
   // Extract authenticated user and access token
-  const { accessToken, user } = authCheck;
+  const { accessToken, authContext } = authCheck;
 
   // Get organization ID from user claims (if available)
   const orgId = await getOrganizationId();
@@ -38,10 +38,11 @@ export async function GET() {
   // Return response with user information
   return NextResponse.json({
     message: 'Authenticated successfully',
-    user: user ? {
-      name: user.name,
-      email: user.email,
-      sub: user.sub,
+    user: authContext ? {
+      userId: authContext.userId,
+      email: authContext.email,
+      name: authContext.name,
+      permissions: authContext.permissions,
     } : undefined,
     organizationId: orgId,
     // Note: Never expose the full access token to the client
